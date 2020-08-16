@@ -1,0 +1,51 @@
+#exercise-container{
+    height: 85vh;
+    overflow: scroll;
+}
+
+#upperbtn-lowerbtn-col, #upperbtn-col, #lowerbtn-col{
+    display:flex;
+    padding:5px;
+    justify-content: center;
+}
+
+#exercise-col{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#exercise-title{
+    font-size: 40px;
+    font-weight: 600;
+    text-shadow: black 1px 1px;
+}
+
+#exercise-body{
+    text-align: center;
+    padding:0px;
+}
+
+#exercise-img-overlay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding:0px;
+}
+
+#each-exercise-div{
+    transition-duration: 1s;
+    color:rgb(181, 181, 181);
+}
+
+#each-exercise-div:hover{
+    cursor: pointer;
+    color:rgb(254, 254, 254);
+    transform: scale(1.1,1.05);
+    transition-duration: 1s;
+}
+
+#each-exercise-div:active{
+    transform: scale(0.9,0.9);
+    transition-duration: 1s;
+}
+

@@ -15,11 +15,11 @@ export default class HomeCards extends Component {
     }
 
     render() {
-        const {getExercises} = this.props
+        const {toggleExercises} = this.props
         return (
             <div>
                 <Col id="card-container" sm="12" md={{ size: 6, offset: 3 }}>
-                        <div className="exercises-div" onClick={getExercises}>
+                        <div className="exercises-div" onClick={toggleExercises}>
                             <Card id="each-card">
                                 <CardImg id="card-img" top width="100%" src={exercisesImg} alt="workouts"/>
                                 <CardImgOverlay >
@@ -30,7 +30,7 @@ export default class HomeCards extends Component {
                             </Card>
                         </div>
                         <br/>
-                        <div className="equipment-div" onClick={getExercises}>
+                        <div className="equipment-div" >
                             <Card id="each-card">
                                 <CardImg id="card-img" top width="100%" src={equipmentImg} alt="workouts"/>
                                 <CardImgOverlay >
@@ -41,7 +41,7 @@ export default class HomeCards extends Component {
                             </Card>
                         </div>
                         <br/>
-                        <div className="nutrition-div" onClick={getExercises}>
+                        <div className="nutrition-div" >
                             <Card id="each-card">
                                 <CardImg id="card-img" top width="100%" src={nutritionImg} alt="workouts"/>
                                 <CardImgOverlay >
