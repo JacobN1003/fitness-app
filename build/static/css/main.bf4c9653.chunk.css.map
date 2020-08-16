@@ -1,0 +1,1 @@
+{"version":3,"sources":["app.css","index.css"],"names":[],"mappings":"AAAA,KAEI,qBAAuB,CACvB,UAAY,CAEZ,SAEJ,CCPA,UDCI,iBAAkB,CAGlB,QCDJ","file":"main.bf4c9653.chunk.css","sourcesContent":[".App{\n    position: relative;\n    background-color: black;\n    color: white;\n    margin: 0;\n    padding: 0;\n    \n}","body{\n    margin: 0;\n    position: relative;\n}"]}

@@ -1,0 +1,16 @@
+html{
+    box-sizing: border-box;
+    width:100%;
+    margin:0;
+    padding:0;
+}
+
+.App{
+    box-sizing: border-box;
+    position: relative;
+    background-color: rgb(24, 24, 24);
+    color: white;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}

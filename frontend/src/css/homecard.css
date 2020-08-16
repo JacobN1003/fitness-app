@@ -1,0 +1,44 @@
+#card-container{
+    padding-bottom:5vh;
+}
+
+#card-body{
+    display:flex;
+    height:100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#card-img{
+    height:25vh;
+}
+
+#card-title{
+    font-size: 7vw;
+    text-shadow: black 1px 1px;
+}
+
+#card-subtitle{
+    font-size: 2vw;
+    text-shadow: black 1px 1px;
+}
+
+.exercises-div, .equipment-div, .nutrition-div{
+    transition-duration: 1s;
+    color:rgba(210, 209, 209, 0.776);
+}
+
+.exercises-div:hover, .equipment-div:hover, .nutrition-div:hover{
+    cursor: pointer;
+    color:rgb(254, 254, 254);
+    transform: scale(1.1,1.05);
+    transition-duration: 1s;
+}
+
+.exercises-div:active, .equipment-div:active, .nutrition-div:active{
+    transform: scale(0.9,0.9);
+    transition-duration: 1s;
+}
+

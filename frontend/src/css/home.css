@@ -1,0 +1,14 @@
+#home-container{
+    margin-top: 5vh;
+    width: 100vw;
+}
+
+#spinner{
+    display:flex;
+    height: 100vh;
+    color: rgb(45, 45, 45);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom:20vh;
+}

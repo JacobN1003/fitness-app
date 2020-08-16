@@ -1,10 +1,14 @@
-import React from 'react';
+import React from 'react'
 import './css/app.css'
+import Navbar from './components/Navbar'
+import Home from './components/Home'
+
 
 function App() {
   return (
     <div className="App">
-      fitness-app
+      <Navbar />
+      <Home />
     </div>
   );
 }
