@@ -17,6 +17,7 @@
 
 #card-title{
     font-size: 7vw;
+    font-weight: 700;
     text-shadow: black 1px 1px;
 }
 
@@ -27,7 +28,7 @@
 
 .exercises-div, .equipment-div, .nutrition-div{
     transition-duration: 1s;
-    color:rgba(210, 209, 209, 0.776);
+    color:rgba(255, 255, 255, 0.776);
 }
 
 .exercises-div:hover, .equipment-div:hover, .nutrition-div:hover{
