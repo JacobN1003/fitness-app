@@ -1,4 +1,36 @@
-#exercise-container{
-    width:100vw;
-    height:100vh;
+.modal{
+    display: flex !important;
+    justify-content: center;
+    padding: 10px;
+}
+
+.modal-header{
+    color: white;
+    background-color: rgb(45, 45, 45);
+}
+
+.modal-title{
+    font-size: 35px;
+}
+
+.close{
+    color: white;
+    text-shadow: none;
+    opacity: 1;
+    font-size: 40px;
+}
+
+hr{
+    background-color: white;
+}
+
+.modal-body{
+    color: white;
+    background-color: rgb(62, 62, 62);
+}
+
+.modal-footer{
+    color: white;
+    background-color: rgb(45, 45, 45);
+
 }

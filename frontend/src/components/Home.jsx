@@ -31,6 +31,8 @@ export default class Home extends Component {
         return true
     }
 
+    
+
     toggleExercises = () => {
         this.setState({ showCards: !this.state.showCards, showExercises: !this.state.showExercises}) 
     }

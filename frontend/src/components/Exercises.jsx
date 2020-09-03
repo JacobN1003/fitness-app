@@ -30,7 +30,7 @@ export default class Exercises extends Component {
 
     onExerciseClick = (exercise) => {
         console.log(exercise)
-        // this.setState({showExercise: !this.state.showExercise, exerciseInfo: exercise})
+        this.setState({showExercise: !this.state.showExercise, exerciseInfo: exercise})
     }
 
     onUpperBodyClick = () => {
@@ -121,47 +121,47 @@ export default class Exercises extends Component {
         console.log(showExercise)
         return (
             <Container id="exercise-container">
-                <Row>
-                    {showBtns === "UpperAndLower" && 
-                        <Col id="upperbtn-lowerbtn-col" >
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onUpperBodyClick}>Upper Body</Button>
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onLowerBodyClick}>Lower Body</Button>
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onAbsClick}>Core</Button>
-                            <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={toggleExercises}>&lt;-</Button>
-                        </Col>
-                    }
-                    {showBtns === "Upper" &&
-                        <Col id="upperbtn-col">
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onChestClick}>Chest</Button>
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onBackClick}>Back</Button>
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onShouldersClick}>Shoulders</Button>
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onArmsClick}>Arms</Button>
-                            <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={this.goBackClick}>&lt;-</Button>
-                        </Col>
-                    }
-                    {showBtns === "Lower" &&
-                        <Col id="lowerbtn-col">
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onLegsClick}>Upper Legs</Button>
-                            <Button size="sm" style={{marginRight:'5px'}} onClick={this.onCalvesClick}>Calves</Button>
-                            <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={this.goBackClick}>&lt;-</Button>
-                        </Col>
-                    }
-                    {showBtns === "Core" &&
-                        <Col id="lowerbtn-col">
-                            <Button size="sm" style={{marginRight:'5px'}} >Abs</Button>
-                            <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={this.goBackClick}>&lt;-</Button>
-                        </Col>
-                    }
+                    <Row>
+                        {showBtns === "UpperAndLower" && 
+                            <Col id="upperbtn-lowerbtn-col" >
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onUpperBodyClick}>Upper Body</Button>
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onLowerBodyClick}>Lower Body</Button>
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onAbsClick}>Core</Button>
+                                <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={toggleExercises}>&lt;-</Button>
+                            </Col>
+                        }
+                        {showBtns === "Upper" &&
+                            <Col id="upperbtn-col">
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onChestClick}>Chest</Button>
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onBackClick}>Back</Button>
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onShouldersClick}>Shoulders</Button>
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onArmsClick}>Arms</Button>
+                                <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={this.goBackClick}>&lt;-</Button>
+                            </Col>
+                        }
+                        {showBtns === "Lower" &&
+                            <Col id="lowerbtn-col">
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onLegsClick}>Upper Legs</Button>
+                                <Button size="sm" style={{marginRight:'5px'}} onClick={this.onCalvesClick}>Calves</Button>
+                                <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={this.goBackClick}>&lt;-</Button>
+                            </Col>
+                        }
+                        {showBtns === "Core" &&
+                            <Col id="lowerbtn-col">
+                                <Button size="sm" style={{marginRight:'5px'}} >Abs</Button>
+                                <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={this.goBackClick}>&lt;-</Button>
+                            </Col>
+                        }
 
-                </Row>
-                <ListGroup id="exercise-col">
-                        {exerciseList.map((exercise, id) => (
-                            <ListGroupItem key={id} id="each-exercise-div" tag="button" onClick={()=>this.onExerciseClick(exercise)}> 
-                                {exercise.name}
-                            </ListGroupItem>
-                        ))}
-                </ListGroup>
-                {/* {showExercise && <Exercise info={exerciseInfo}/>} */}
+                    </Row>
+                    <ListGroup id="exercise-col">
+                            {exerciseList.map((exercise, id) => (
+                                <ListGroupItem key={id} id="each-exercise-div" tag="button" onClick={()=>this.onExerciseClick(exercise)}> 
+                                    {exercise.name}
+                                </ListGroupItem>
+                            ))}
+                    </ListGroup>
+                {showExercise && <Exercise info={exerciseInfo} isOpen={showExercise}/>}
             </Container>
         )
     }
