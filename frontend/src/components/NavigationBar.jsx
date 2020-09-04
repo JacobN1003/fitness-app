@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {Navbar, NavbarText, NavbarBrand, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap'
+import { Tooltip, Navbar, NavbarText, NavbarBrand, Button, Modal, ModalHeader, 
+    ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap'
 import '../css/navigationbar.css'
 
 export default class NavigationBar extends Component {
@@ -7,21 +8,30 @@ export default class NavigationBar extends Component {
         super()
         this.state ={
             loginModal: false,
+            tooltipOpen: false
         }
+        this.openLoginModal = this.openLoginModal.bind(this)
+        this.toggleToolTip = this.toggleToolTip.bind(this)
     }
 
     openLoginModal = () => {
         this.setState({loginModal: !this.state.loginModal})
     }
 
+    toggleToolTip = () => {
+        this.setState({tooltipOpen: !this.state.tooltipOpen})
+    }
+
     render() {
-        const { loginModal } = this.state
+        const { loginModal, tooltipOpen } = this.state
         return (
             <div>
                 <Navbar color="dark" dark>
-                    <NavbarBrand href="/" className="mr-auto">FitnessApp</NavbarBrand>
+                    <NavbarBrand href="/" className="mr-auto" id="tooltip">FitnessApp</NavbarBrand>
+                    <Tooltip placement="bottom" isOpen={tooltipOpen} target="tooltip" toggle={this.toggleToolTip}>
+                        Data used with WGER Workout Manager
+                    </Tooltip>
                     <NavbarText className="mr-auto">
-                        
                     </NavbarText>
                     <Button color="primary" className="mr-2" onClick={this.openLoginModal}>Login</Button>
                 </Navbar>

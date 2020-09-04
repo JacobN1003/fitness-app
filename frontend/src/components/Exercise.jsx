@@ -9,10 +9,20 @@ export default class Exercise extends Component {
             isOpen: this.props.isOpen
         }
         this.toggleModal = this.toggleModal.bind(this)
+        this.formatDescription = this.formatDescription.bind(this)
     }
 
     toggleModal = () => {
         this.setState({isOpen: !this.state.isOpen})
+    }
+
+    formatDescription = (data) => {
+        let newdata = data.slice(3,-4)
+        for(let i = 0; i < 2; i++) newdata = newdata.replace('<p>', '')
+        for(let i = 0; i < 2; i++) newdata = newdata.replace('</p>', '')
+        for(let i = 0; i < 2; i++) newdata = newdata.replace('<em>', '')
+        for(let i = 0; i < 2; i++) newdata = newdata.replace('</em>', '')
+        return newdata
     }
 
     render() {
@@ -24,16 +34,24 @@ export default class Exercise extends Component {
                     <ModalHeader toggle={this.toggleModal} charCode="x">{info.name}</ModalHeader>
                     <ModalBody>
                         <p>Description:</p>
-                        {info.description.slice(3, -4)}
+                        {this.formatDescription(info.description)}
                         <hr/>
                         <p>Muscles:</p> 
-                        {info.muscles.map(muscle => (
-                            <ul> {muscle.name} </ul>
+                        {info.muscles.map((muscle,id) => (
+                            <ul key={id}> {muscle.name} </ul>
+                        ))}
+                        {info.muscles_secondary.map((muscle,id) => (
+                            <ul key={id}> {muscle.name} </ul>
+                        ))}
+                        <hr/>
+                        <p>Equipment:</p>
+                        {info.equipment.map((equipment,id) => (
+                            <ul key={id}> {equipment.name} </ul>
                         ))}
                     </ModalBody>
-                    <ModalFooter>
+                    {/* <ModalFooter>
                         <Button onClick={this.toggleModal}>More Info</Button>
-                    </ModalFooter>
+                    </ModalFooter> */}
                 </Modal>
             </div>
         )

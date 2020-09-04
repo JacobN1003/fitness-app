@@ -3,6 +3,8 @@
     padding-left: 4vw;
     padding-right: 4vw;
     width: 100vw;
+    text-align: center;
+    color: rgb(108, 108, 108);
 }
 
 #spinner{

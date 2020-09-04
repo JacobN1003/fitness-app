@@ -4,6 +4,7 @@ import axios from 'axios'
 import '../css/home.css'
 import HomeCards from './HomeCards.jsx'
 import Exercises from './Exercises.jsx'
+import Equipment from './Equipment.jsx'
 
 export default class Home extends Component {
     constructor(){
@@ -15,13 +16,17 @@ export default class Home extends Component {
             showEquipment: false,
             showNutrition: false,
             exercises: [],
+            equipment: []
         }
         this.getExercises = this.getExercises.bind(this)
+        this.getEquipment = this.getEquipment.bind(this)
         this.toggleExercises = this.toggleExercises.bind(this)
+        this.toggleEquipment = this.toggleEquipment.bind(this)
     }
 
     componentDidMount(){
         this.getExercises()
+        this.getEquipment()
     }
 
     getExercises = () => {
@@ -31,15 +36,30 @@ export default class Home extends Component {
         return true
     }
 
-    
+    getEquipment = () => {
+        axios.get("/equipment").then( response => {
+            this.setState({equipment: response.data.data, isLoading: false})
+        })
+        return true
+    }
 
     toggleExercises = () => {
-        this.setState({ showCards: !this.state.showCards, showExercises: !this.state.showExercises}) 
+        this.setState({ 
+            showCards: !this.state.showCards, 
+            showExercises: !this.state.showExercises,
+            }) 
+    }
+
+    toggleEquipment = () => {
+        this.setState({ 
+            showCards: !this.state.showCards, 
+            showEquipment: !this.state.showEquipment,
+           })
     }
 
     render() {
-        const { showCards, showExercises, exercises, exerciseimages, isLoading } = this.state
-        console.log(this.state)
+        const { showCards, showExercises, showEquipment, exercises, equipment, isLoading } = this.state
+        //console.log(this.state)
         return (
             <div id="home-container">
                 {isLoading ? 
@@ -51,13 +71,18 @@ export default class Home extends Component {
                 <div>
                     {showCards &&  
                         <HomeCards 
-                        toggleExercises={this.toggleExercises} />
+                        toggleExercises={this.toggleExercises}
+                        toggleEquipment={this.toggleEquipment} />
                     }
                     {showExercises &&  
                         <Exercises 
                             toggleExercises={this.toggleExercises} 
-                            exercises={exercises} 
-                            images={exerciseimages}/>
+                            exercises={exercises}/>
+                    }
+                    {showEquipment &&
+                        <Equipment
+                        toggleEquipment={this.toggleEquipment}
+                        equipment={equipment}/>
                     }
                 </div>}
             </div>

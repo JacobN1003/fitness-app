@@ -29,7 +29,6 @@ export default class Exercises extends Component {
     }
 
     onExerciseClick = (exercise) => {
-        console.log(exercise)
         this.setState({showExercise: !this.state.showExercise, exerciseInfo: exercise})
     }
 
@@ -39,6 +38,7 @@ export default class Exercises extends Component {
         let upperBody = []
         exercises.map((exercise) => {
             if(upperBodyCheck.includes(exercise.category.name)) upperBody.push(exercise)
+            return true
         })
         this.setState({showBtns: "Upper", exerciseList: upperBody})
     }
@@ -49,6 +49,7 @@ export default class Exercises extends Component {
         let lowerBody = []
         exercises.map((exercise) => {
             if(lowerBodyCheck.includes(exercise.category.name)) lowerBody.push(exercise)
+            return true
         })
         this.setState({showBtns: "Lower", exerciseList: lowerBody})
     }
@@ -58,6 +59,7 @@ export default class Exercises extends Component {
         let Abs = []
         exercises.map((exercise)=> {
             if(exercise.category.name === "Abs") Abs.push(exercise)
+            return true
         })
         this.setState({showBtns: "Core", exerciseList: Abs})
     }
@@ -67,6 +69,7 @@ export default class Exercises extends Component {
         let Chest = []
         exercises.map((exercise)=> {
             if(exercise.category.name === "Chest") Chest.push(exercise)
+            return true
         })
         this.setState({exerciseList: Chest})
     }
@@ -75,6 +78,7 @@ export default class Exercises extends Component {
         let Back = []
         exercises.map((exercise)=> {
             if(exercise.category.name === "Back") Back.push(exercise)
+            return true
         })
         this.setState({exerciseList: Back})
     }
@@ -83,6 +87,7 @@ export default class Exercises extends Component {
         let Shoulders = []
         exercises.map((exercise)=> {
             if(exercise.category.name === "Shoulders") Shoulders.push(exercise)
+            return true
         })
         this.setState({exerciseList: Shoulders})
     }
@@ -91,6 +96,7 @@ export default class Exercises extends Component {
         let Arms = []
         exercises.map((exercise)=> {
             if(exercise.category.name === "Arms") Arms.push(exercise)
+            return true
         })
         this.setState({exerciseList: Arms})
     }
@@ -99,6 +105,7 @@ export default class Exercises extends Component {
         let Legs = []
         exercises.map((exercise)=> {
             if(exercise.category.name === "Legs") Legs.push(exercise)
+            return true
         })
         this.setState({exerciseList: Legs})
     }
@@ -107,6 +114,7 @@ export default class Exercises extends Component {
         let Calves = []
         exercises.map((exercise)=> {
             if(exercise.category.name === "Calves") Calves.push(exercise)
+            return true
         })
         this.setState({exerciseList: Calves})
     }
@@ -118,7 +126,7 @@ export default class Exercises extends Component {
     render() {
         const {toggleExercises} = this.props
         const {showExercise, exerciseInfo, showBtns, exerciseList} = this.state
-        console.log(showExercise)
+        //console.log(showExercise)
         return (
             <Container id="exercise-container">
                     <Row>

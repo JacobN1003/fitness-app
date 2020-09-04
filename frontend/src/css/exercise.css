@@ -1,7 +1,12 @@
 .modal{
     display: flex !important;
     justify-content: center;
-    padding: 10px;
+    padding: 20px;
+    
+}
+
+.modal-content{
+    background-color: transparent;
 }
 
 .modal-header{
@@ -27,6 +32,7 @@ hr{
 .modal-body{
     color: white;
     background-color: rgb(62, 62, 62);
+    margin-bottom: 20px;
 }
 
 .modal-footer{

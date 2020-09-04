@@ -1,0 +1,41 @@
+#equipent-row{
+    padding-top: 10px;
+}
+
+#title{
+    margin-top: -25px;
+    color: white;
+    font-size: 60px;
+    font-weight: 600;
+}
+
+#equipment-container{
+    padding-top: 15px;
+    height: 85vh;
+    overflow: scroll;  
+}
+
+.card-title{
+    color: white;
+    font-size: 50px;
+    font-weight: 400;
+}
+
+.card-img-overlay{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#each-card{
+    transition-duration: 1s;
+}
+
+#each-card:hover{
+    transition-duration: 1s;
+    transform: scale(1.05,1.1);
+}
+
+#each-card:active{
+    transition-duration: 1s;
+}   
