@@ -6,7 +6,8 @@
 }
 
 .modal-content{
-    background-color: transparent;
+    color:white;
+    background-color: rgb(45, 45, 45);;
 }
 
 .modal-header{
@@ -29,7 +30,7 @@ hr{
     background-color: white;
 }
 
-.modal-body{
+.modal_body{
     color: white;
     background-color: rgb(62, 62, 62);
     margin-bottom: 20px;

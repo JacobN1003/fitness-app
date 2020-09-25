@@ -32,7 +32,7 @@ export default class Exercise extends Component {
             <div id="exercise">
                 <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} >
                     <ModalHeader toggle={this.toggleModal} charCode="x">{info.name}</ModalHeader>
-                    <ModalBody>
+                    <ModalBody id="modal_body">
                         <p>Description:</p>
                         {this.formatDescription(info.description)}
                         <hr/>
