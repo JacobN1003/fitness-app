@@ -27,7 +27,7 @@ export default class NavigationBar extends Component {
         return (
             <div>
                 <Navbar color="dark" dark>
-                    <NavbarBrand href="/" className="mr-auto" id="tooltip">FitnessApp</NavbarBrand>
+                    <NavbarBrand className="mr-auto" id="tooltip">FitnessApp</NavbarBrand>
                     <Tooltip placement="bottom" isOpen={tooltipOpen} target="tooltip" toggle={this.toggleToolTip}>
                         Data used with WGER Workout Manager
                     </Tooltip>

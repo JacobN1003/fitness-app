@@ -25,7 +25,6 @@ export default class Exercises extends Component {
         this.onArmsClick = this.onArmsClick.bind(this)
         this.onLegsClick = this.onLegsClick.bind(this)
         this.onCalvesClick = this.onCalvesClick.bind(this)
-
     }
 
     onExerciseClick = (exercise) => {
@@ -132,14 +131,15 @@ export default class Exercises extends Component {
                     <Row>
                         {showBtns === "UpperAndLower" && 
                             <Col id="upperbtn-lowerbtn-col" >
+                                <Button color="info" size="sm" style={{borderRadius:'10px', marginRight: '10px'}} onClick={toggleExercises}>&lt;-</Button>
                                 <Button size="sm" style={{marginRight:'5px'}} onClick={this.onUpperBodyClick}>Upper Body</Button>
                                 <Button size="sm" style={{marginRight:'5px'}} onClick={this.onLowerBodyClick}>Lower Body</Button>
                                 <Button size="sm" style={{marginRight:'5px'}} onClick={this.onAbsClick}>Core</Button>
-                                <Button color="info" size="sm" style={{borderRadius:'50px'}} onClick={toggleExercises}>&lt;-</Button>
                             </Col>
                         }
                         {showBtns === "Upper" &&
                             <Col id="upperbtn-col">
+                                
                                 <Button size="sm" style={{marginRight:'5px'}} onClick={this.onChestClick}>Chest</Button>
                                 <Button size="sm" style={{marginRight:'5px'}} onClick={this.onBackClick}>Back</Button>
                                 <Button size="sm" style={{marginRight:'5px'}} onClick={this.onShouldersClick}>Shoulders</Button>
@@ -164,7 +164,11 @@ export default class Exercises extends Component {
                     </Row>
                     <ListGroup id="exercise-col">
                             {exerciseList.map((exercise, id) => (
-                                <ListGroupItem key={id} id="each-exercise-div" tag="button" onClick={()=>this.onExerciseClick(exercise)}> 
+                                <ListGroupItem 
+                                    key={id} 
+                                    id="each-exercise-div" 
+                                    tag="button" 
+                                    onClick={()=>this.onExerciseClick(exercise)}> 
                                     {exercise.name}
                                 </ListGroupItem>
                             ))}

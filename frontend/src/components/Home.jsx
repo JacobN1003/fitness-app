@@ -5,6 +5,7 @@ import '../css/home.css'
 import HomeCards from './HomeCards.jsx'
 import Exercises from './Exercises.jsx'
 import Equipment from './Equipment.jsx'
+import Nutrition from './Nutrition.jsx'
 
 export default class Home extends Component {
     constructor(){
@@ -16,29 +17,39 @@ export default class Home extends Component {
             showEquipment: false,
             showNutrition: false,
             exercises: [],
-            equipment: []
+            equipment: [],
+            ingredients: []
         }
         this.getExercises = this.getExercises.bind(this)
         this.getEquipment = this.getEquipment.bind(this)
         this.toggleExercises = this.toggleExercises.bind(this)
         this.toggleEquipment = this.toggleEquipment.bind(this)
+        this.toggleNutrition = this.toggleNutrition.bind(this)
     }
 
     componentDidMount(){
         this.getExercises()
         this.getEquipment()
+        this.getIngredients() 
     }
 
     getExercises = () => {
         axios.get("/exercises").then( response => {
-            this.setState({exercises: response.data.data, isLoading: false})
+            this.setState({exercises: response.data.data})
         })
         return true
     }
 
     getEquipment = () => {
         axios.get("/equipment").then( response => {
-            this.setState({equipment: response.data.data, isLoading: false})
+            this.setState({equipment: response.data.data})
+        })
+        return true
+    }
+
+    getIngredients = () => {
+        axios.get("/ingredients").then( response => {
+            this.setState({ingredients: response.data.data, isLoading: false})
         })
         return true
     }
@@ -57,9 +68,17 @@ export default class Home extends Component {
            })
     }
 
+    toggleNutrition = () => {
+        this.setState({ 
+            showCards: !this.state.showCards, 
+            showNutrition: !this.state.showNutrition,
+            }) 
+        }
+
     render() {
-        const { showCards, showExercises, showEquipment, exercises, equipment, isLoading } = this.state
+        const { showCards, showExercises, showEquipment, showNutrition, exercises, equipment, ingredients, isLoading } = this.state
         console.log(this.state)
+        console.log(localStorage)
         return (
             <div id="home-container">
                 {isLoading ? 
@@ -72,7 +91,8 @@ export default class Home extends Component {
                     {showCards &&  
                         <HomeCards 
                         toggleExercises={this.toggleExercises}
-                        toggleEquipment={this.toggleEquipment} />
+                        toggleEquipment={this.toggleEquipment}
+                        toggleNutrition={this.toggleNutrition} />
                     }
                     {showExercises &&  
                         <Exercises 
@@ -84,6 +104,11 @@ export default class Home extends Component {
                         toggleEquipment={this.toggleEquipment}
                         equipment={equipment}/>
                     }
+                    {showNutrition &&
+                        <Nutrition
+                            toggleNutrition={this.toggleNutrition}
+                            ingredients={ingredients}
+                        />}
                 </div>}
             </div>
         )

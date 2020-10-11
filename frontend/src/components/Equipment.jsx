@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Container, Row, Col, Card, CardImg, CardImgOverlay, CardTitle} from 'reactstrap'
+import {Container, Row, Col, Card, CardImg, CardImgOverlay, CardTitle, Button} from 'reactstrap'
 import equipmentImg from "../imgs/equipment.jpg"
 import '../css/equipment.css'
 
@@ -17,12 +17,13 @@ export default class Equipment extends Component {
     }
 
     render() {
-        const {equipment} = this.props
+        const {equipment, toggleEquipment} = this.props
         console.log(equipment)
         return (
             <div id="outer-container">
-                <p id="title">Equipment</p>
+                {/* <p id="title">Equipment</p> */}
                 <Container id="equipment-container">
+                <Button color="info" size="sm" style={{borderRadius:'10px', marginRight: '10px'}} onClick={toggleEquipment}>&lt;-</Button>
                     <Row id="equipment-row" md="3">
                             {equipment.map((equipment, id)=>(
                                 <div key={id}>

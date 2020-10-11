@@ -27,7 +27,6 @@ export default class Exercise extends Component {
 
     render() {
         const {info} = this.props
-        console.log(info)
         return (
             <div id="exercise">
                 <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} >
