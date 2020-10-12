@@ -77,8 +77,7 @@ export default class Home extends Component {
 
     render() {
         const { showCards, showExercises, showEquipment, showNutrition, exercises, equipment, ingredients, isLoading } = this.state
-        console.log(this.state)
-        console.log(localStorage)
+        
         return (
             <div id="home-container">
                 {isLoading ? 

@@ -1,16 +1,22 @@
 import React, { Component } from 'react'
-import { Tooltip, Navbar, NavbarText, NavbarBrand, Button, Modal, ModalHeader, 
-    ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap'
+import { Tooltip, Navbar, NavbarText, NavbarBrand, Button} from 'reactstrap'
 import '../css/navigationbar.css'
+import LoginForm from './LoginForm.jsx'
+import NewUserForm from './NewUserForm.jsx'
+import ForgotPasswordForm from './ForgotPasswordForm.jsx'
 
 export default class NavigationBar extends Component {
     constructor(){
         super()
         this.state ={
             loginModal: false,
+            newUserModal: false,
+            forgotPasswordModal: false,
             tooltipOpen: false
         }
         this.openLoginModal = this.openLoginModal.bind(this)
+        this.openNewUserModal = this.openNewUserModal.bind(this)
+        this.openForgotPasswordModal = this.openForgotPasswordModal.bind(this)
         this.toggleToolTip = this.toggleToolTip.bind(this)
     }
 
@@ -18,12 +24,23 @@ export default class NavigationBar extends Component {
         this.setState({loginModal: !this.state.loginModal})
     }
 
+    openNewUserModal = () =>{
+        this.setState({newUserModal: !this.state.newUserModal})
+        this.openLoginModal()
+    }
+
+    openForgotPasswordModal = () =>{
+        this.setState({forgotPasswordModal: !this.state.forgotPasswordModal})
+        this.openLoginModal()
+    }
+
     toggleToolTip = () => {
         this.setState({tooltipOpen: !this.state.tooltipOpen})
     }
 
     render() {
-        const { loginModal, tooltipOpen } = this.state
+        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen } = this.state
+       
         return (
             <div>
                 <Navbar color="dark" dark>
@@ -36,29 +53,19 @@ export default class NavigationBar extends Component {
                     <Button color="primary" className="mr-2" onClick={this.openLoginModal}>Login</Button>
                 </Navbar>
 
-                <Modal isOpen={loginModal} id="login-modal-container">
-                    <ModalHeader style={{backgroundColor:"#343a40", color:'white'}}>Login</ModalHeader>
-                    <ModalBody style={{backgroundColor:"rgb(24, 24, 24)", color:'white'}}> 
-                        <Form>
-                            <FormGroup >
-                                <Label>Email</Label>
-                                <Input  type="email" name="email"></Input>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Password</Label>
-                                <Input type="password" name="password"></Input>
-                            </FormGroup>
-                            <div id="register-forgotpw-btncontainer">
-                                <Button id="register-btn" color="secondary" size="sm" onClick={this.openLoginModal} >Register</Button>
-                                <Button id="forgotpw-btn" color="secondary" size="sm" onClick={this.openLoginModal}>Forgot Password?</Button>
-                            </div>
-                        </Form>
-                    </ModalBody>
-                    <ModalFooter style={{backgroundColor:"#343a40", color:'white'}}> 
-                        <Button color="primary" onClick={this.openLoginModal} >Login</Button>
-                        <Button color="secondary" onClick={this.openLoginModal}>Cancel</Button>
-                    </ModalFooter>
-                </Modal>
+                <LoginForm 
+                    loginModal={loginModal} 
+                    openLoginModal={this.openLoginModal}
+                    openNewUserModal={this.openNewUserModal}
+                    />
+                <NewUserForm 
+                    newUserModal={newUserModal} 
+                    openNewUserModal={this.openNewUserModal}
+                    />
+                <ForgotPasswordForm 
+                    forgotPasswordModal={forgotPasswordModal} 
+                    openForgotPasswordModal={this.openForgotPasswordModal}
+                    />
             </div>
         )
     }

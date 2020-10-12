@@ -31,7 +31,7 @@ export default class Equipment extends Component {
                                         <Card id="each-card" key={id} onClick={()=>this.eachEquipment(equipment)}>
                                             <CardImg width="100%" src={equipmentImg} alt="default alt thing" />
                                             <CardImgOverlay>
-                                                <CardTitle>{equipment}</CardTitle>
+                                                <CardTitle>{equipment.name}</CardTitle>
                                             </CardImgOverlay>
                                         </Card>
                                     </Col>
