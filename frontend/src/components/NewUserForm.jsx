@@ -26,7 +26,7 @@ export default class NewUserForm extends Component {
 
     render() {
         let {newUserModal, openNewUserModal} = this.props
-        console.log(this.state)
+        //console.log(this.state)
         return (
             <div>
                  <Modal isOpen={newUserModal} id="login-modal-container">

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Modal, ModalBody, ModalHeader, ModalFooter, Button} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader} from 'reactstrap'
 import '../css/exercise.css'
 
 export default class Exercise extends Component {

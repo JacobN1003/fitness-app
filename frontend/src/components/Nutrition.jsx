@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import {Container, Spinner, Button, Input, ListGroup, ListGroupItem, InputGroup} from 'reactstrap'
-import axios from 'axios'
+import {Container, Button, Input, ListGroup, ListGroupItem, InputGroup} from 'reactstrap'
 import '../css/nutrition.css'
 import Ingredient from './Ingredient.jsx'
 
@@ -26,14 +25,14 @@ export default class Nutrition extends Component {
         let word_lower = word.toLowerCase()
         let {ingredients} = this.props
         let results = []
-        ingredients.map((ingredient) => {
+        ingredients.forEach((ingredient) => {
             let reduced = ingredient.name.toLowerCase().split(',')[0]
             if(reduced.includes(word_lower)){
                 results.push(ingredient)
-                //console.log(reduced)
             }
         })
         this.setState({searchResults: results, searchHeader: "No Results.."})
+        
     }
 
     showInfo = (ingredient) => {
