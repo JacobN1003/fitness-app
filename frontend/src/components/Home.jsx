@@ -25,12 +25,20 @@ export default class Home extends Component {
         this.toggleExercises = this.toggleExercises.bind(this)
         this.toggleEquipment = this.toggleEquipment.bind(this)
         this.toggleNutrition = this.toggleNutrition.bind(this)
+        this.getUser = this.getUser.bind(this)
     }
 
     componentDidMount(){
         this.getExercises()
         this.getEquipment()
         this.getIngredients() 
+        this.getUser()
+    }
+
+    getUser = () => {
+        axios.get("/get_users").then(response => {
+            console.log(response.data)
+        })
     }
 
     getExercises = () => {

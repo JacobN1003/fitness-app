@@ -2,37 +2,31 @@ const express = require('express')
 const app = express()
 const fetch = require('request')
 const BASE_URL = 'https://wger.de/api/v2/'
-const PORT = 5000
+const PORT = 5001
 const {MongoClient} = require('mongodb')
 const uri = "mongodb+srv://noren002:JustinN27@cluster0.zxtob.mongodb.net/cluster0?retryWrites=true&w=majority"
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 
+
 //MongoDB CRUD Functions ------------------------------------------------------------------------------------
-async function listDatabases(client){
-    databasesList = await client.db().admin().listDatabases();
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(" -", db.name));
-};
+// async function listDatabases(client){
+//     databasesList = await client.db().admin().listDatabases();
+//     console.log("Databases:");
+//     databasesList.databases.forEach(db => console.log(" -", db.name));
+// };
 
-app.post('/adduser', (req, res)=>{
-
+app.get('/get_users', async (req, res)=>{
+    try{
+        await client.connect()
+        await client.db('fitness-app').collection('users').find().toArray().then( users => { res.send({'message': 'ok', 'data': users}) } )
+        }
+    catch(err){
+        console.log(err)
+    }
+    finally{
+        await client.close()
+    }
 })
-async function addUser(client, user){
-    const result = await client.db('fitness-app').collection('users').insertOne(user)
-    console.log(result)
-}
-
-async function removeUser(client, user){
-    //...
-}
-
-async function editUser(client, user){
-    //...
-}
-
-async function findUser(client, user){
-    //...
-}
 
 
 
@@ -45,7 +39,7 @@ app.get('/exercises', (req, res) => {
             data.results.map(each => { 
                 datalist.push(each) 
             })
-            res.send({ 'message': "success", 'status': response.statusCode, 'data': datalist })
+            res.send({ 'message': "success", 'status': response.statusCode, 'data': datalist})
         }
         else res.send({ 'message': "There was an error", 'status': response.statusCode, 'data': null })
     })
@@ -79,12 +73,4 @@ app.get('/ingredients', (req, res) => {
     })
 })
 
-
-//Run Server -----------------------------------------------------------------------------------------------------
-async function run(){
-    await client.connect()
-    await listDatabases(client)
-}
-run()
-//client.connect()
 app.listen(PORT, () => console.log(`listening on port ${PORT}..`))
