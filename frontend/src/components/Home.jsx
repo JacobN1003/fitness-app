@@ -18,27 +18,20 @@ export default class Home extends Component {
             showNutrition: false,
             exercises: [],
             equipment: [],
-            ingredients: []
+            ingredients: [],
+            
         }
         this.getExercises = this.getExercises.bind(this)
         this.getEquipment = this.getEquipment.bind(this)
         this.toggleExercises = this.toggleExercises.bind(this)
         this.toggleEquipment = this.toggleEquipment.bind(this)
         this.toggleNutrition = this.toggleNutrition.bind(this)
-        this.getUser = this.getUser.bind(this)
     }
 
     componentDidMount(){
         this.getExercises()
         this.getEquipment()
         this.getIngredients() 
-        this.getUser()
-    }
-
-    getUser = () => {
-        axios.get("/get_users").then(response => {
-            console.log(response.data)
-        })
     }
 
     getExercises = () => {

@@ -6,18 +6,20 @@ import NewUserForm from './NewUserForm.jsx'
 import ForgotPasswordForm from './ForgotPasswordForm.jsx'
 
 export default class NavigationBar extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state ={
             loginModal: false,
             newUserModal: false,
             forgotPasswordModal: false,
-            tooltipOpen: false
+            tooltipOpen: false,
+            userInfo: {}
         }
         this.openLoginModal = this.openLoginModal.bind(this)
         this.openNewUserModal = this.openNewUserModal.bind(this)
         this.openForgotPasswordModal = this.openForgotPasswordModal.bind(this)
         this.toggleToolTip = this.toggleToolTip.bind(this)
+        this.setUserInfo = this.setUserInfo.bind(this)
     }
 
     openLoginModal = () => {
@@ -38,9 +40,13 @@ export default class NavigationBar extends Component {
         this.setState({tooltipOpen: !this.state.tooltipOpen})
     }
 
+    setUserInfo = (user) => {
+        this.setState({userInfo: user})
+    }
+
     render() {
-        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen } = this.state
-       
+        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen, userInfo } = this.state
+       console.log(userInfo)
         return (
             <div>
                 <Navbar color="dark" dark>
@@ -57,6 +63,7 @@ export default class NavigationBar extends Component {
                     loginModal={loginModal} 
                     openLoginModal={this.openLoginModal}
                     openNewUserModal={this.openNewUserModal}
+                    setUserInfo={this.setUserInfo}
                     />
                 <NewUserForm 
                     newUserModal={newUserModal} 
