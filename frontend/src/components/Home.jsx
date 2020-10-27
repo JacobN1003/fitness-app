@@ -6,6 +6,10 @@ import HomeCards from './HomeCards.jsx'
 import Exercises from './Exercises.jsx'
 import Equipment from './Equipment.jsx'
 import Nutrition from './Nutrition.jsx'
+import UserProfile from './UserProfile.jsx'
+import UserWorkouts from './UserWorkouts.jsx'
+import UserMealPlans from './UserMealPlans.jsx'
+import UserLogout from './UserLogout.jsx'
 
 export default class Home extends Component {
     constructor(){
@@ -78,7 +82,16 @@ export default class Home extends Component {
 
     render() {
         const { showCards, showExercises, showEquipment, showNutrition, exercises, equipment, ingredients, isLoading } = this.state
-        
+        let {showUserProfile, showUserWorkouts, showUserMealPlans, showUserLogout, isLoggedIn} = this.props
+        let userInfo = {"user":
+            {
+                "username": "Jacob", 
+                "password":"JacobN1", 
+                "email": "Jacob@jacob.com",
+                "workouts": ["Chest", "Back", "Legs", "Calves", "Shoulders"],
+                "meals": ["Meal 1", "Meal 2", "Meal 3", "Meal 4", "Meal 5"]
+            }
+        }
         return (
             <div id="home-container">
                 {isLoading ? 
@@ -110,6 +123,26 @@ export default class Home extends Component {
                             ingredients={ingredients}
                         />}
                 </div>}
+                
+                {isLoggedIn && 
+                    <div> 
+                        <UserProfile 
+                        showUserProfile={showUserProfile}
+                        userInfo={userInfo}
+                        />
+                        <UserWorkouts 
+                            showUserWorkouts={showUserWorkouts}
+                            userInfo={userInfo}
+                        />
+                        <UserMealPlans 
+                            showUserMealPlans={showUserMealPlans}
+                            userInfo={userInfo}
+                        />
+                        <UserLogout 
+                            showUserLogout={showUserLogout}
+                            userInfo={userInfo}
+                        />
+                    </div>}
             </div>
         )
     }

@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Tooltip, Navbar, NavbarText, NavbarBrand, Button} from 'reactstrap'
+import { Tooltip, Navbar, NavbarBrand, Button, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap'
 import '../css/navigationbar.css'
 import LoginForm from './LoginForm.jsx'
 import NewUserForm from './NewUserForm.jsx'
 import ForgotPasswordForm from './ForgotPasswordForm.jsx'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faUserCircle} from '@fortawesome/free-solid-svg-icons'
 
 export default class NavigationBar extends Component {
     constructor(props){
@@ -13,13 +15,15 @@ export default class NavigationBar extends Component {
             newUserModal: false,
             forgotPasswordModal: false,
             tooltipOpen: false,
-            userInfo: {}
+            userInfo: {},
+            isLoggedIn: false
         }
         this.openLoginModal = this.openLoginModal.bind(this)
         this.openNewUserModal = this.openNewUserModal.bind(this)
         this.openForgotPasswordModal = this.openForgotPasswordModal.bind(this)
         this.toggleToolTip = this.toggleToolTip.bind(this)
         this.setUserInfo = this.setUserInfo.bind(this)
+        
     }
 
     openLoginModal = () => {
@@ -41,24 +45,34 @@ export default class NavigationBar extends Component {
     }
 
     setUserInfo = (user) => {
-        this.setState({userInfo: user})
+        this.setState({userInfo: user, isLoggedIn: true})
+        this.props.onUserLogin(user, this.state.isLoggedIn)
     }
 
+    
+
     render() {
-        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen, userInfo } = this.state
-       console.log(userInfo)
+        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen, isLoggedIn } = this.state
+       
         return (
             <div>
                 <Navbar color="dark" dark>
-                    <NavbarBrand className="mr-auto" id="tooltip">FitnessApp</NavbarBrand>
+                    <NavbarBrand className="mr-auto" id="tooltip">The Training Room</NavbarBrand>
                     <Tooltip placement="bottom" isOpen={tooltipOpen} target="tooltip" toggle={this.toggleToolTip}>
                         Data used with WGER Workout Manager
                     </Tooltip>
-                    <NavbarText className="mr-auto">
-                    </NavbarText>
-                    <Button color="primary" className="mr-2" onClick={this.openLoginModal}>Login</Button>
+                    {!isLoggedIn && <Button color="primary" className="mr-2" onClick={this.openLoginModal}> Login </Button>}
+                    {isLoggedIn && 
+                        <UncontrolledDropdown >
+                            <DropdownToggle> 
+                                <FontAwesomeIcon icon={faUserCircle} size="2x"/>
+                            </DropdownToggle>
+                            <DropdownMenu right>
+                                <DropdownItem onClick={this.props.toggleUserProfile}> Profile </DropdownItem>
+                                <DropdownItem onClick={this.props.toggleUserLogout} > Logout </DropdownItem>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>}
                 </Navbar>
-
                 <LoginForm 
                     loginModal={loginModal} 
                     openLoginModal={this.openLoginModal}
@@ -73,6 +87,7 @@ export default class NavigationBar extends Component {
                     forgotPasswordModal={forgotPasswordModal} 
                     openForgotPasswordModal={this.openForgotPasswordModal}
                     />
+                
             </div>
         )
     }

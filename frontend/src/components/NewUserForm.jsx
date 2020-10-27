@@ -12,7 +12,7 @@ export default class NewUserForm extends Component {
             email: "",
             showError: false,
             error: "",
-            showForm: false
+            showForm: true
         }
         this.onSubmit = this.onSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
@@ -31,6 +31,7 @@ export default class NewUserForm extends Component {
             .then(response => {
                 if(response.data.message === "ok"){
                     this.setState({username: "", password: "", re_password: "", email: "", showForm: false})
+                    console.log(response.data)
                 }
                 else{
                     this.setState({showError: true, error: response.data.message})
@@ -44,7 +45,7 @@ export default class NewUserForm extends Component {
     render() {
         let {newUserModal, openNewUserModal} = this.props
         let {showError, error, showForm} = this.state
-        
+
         return (
             <div>
                  <Modal isOpen={newUserModal} id="login-modal-container">

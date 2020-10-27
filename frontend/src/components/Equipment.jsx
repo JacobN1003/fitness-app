@@ -18,7 +18,7 @@ export default class Equipment extends Component {
 
     render() {
         const {equipment, toggleEquipment} = this.props
-        console.log(equipment)
+        //console.log(equipment)
         return (
             <div id="outer-container">
                 {/* <p id="title">Equipment</p> */}

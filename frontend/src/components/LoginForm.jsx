@@ -28,6 +28,7 @@ export default class LoginForm extends Component {
             .then(response => {
                 if(response.data.message === "ok"){
                     this.props.setUserInfo(response.data.data)
+                    this.setState({username:"", password:""})
                     this.props.openLoginModal()
                 }
                 else{

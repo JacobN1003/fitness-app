@@ -1,14 +1,11 @@
 import React from 'react'
 import './css/app.css'
-import NavigationBar from './components/NavigationBar'
-import Home from './components/Home'
-
+import MainPage from './components/MainPage'
 
 function App() {
   return (
     <div className="App">
-      <NavigationBar />
-      <Home />
+      <MainPage/>
     </div>
   );
 }
