@@ -27,7 +27,7 @@ export default class NewUserForm extends Component {
     onSubmit = () =>{
         let {username, password, re_password, email} = this.state
         try{
-            axios.post("/add_user", {"username": username, "password": password, "re_password": re_password, "email": email})
+            axios.post("/register", {"username": username, "password": password, "re_password": re_password, "email": email})
             .then(response => {
                 if(response.data.message === "ok"){
                     this.setState({username: "", password: "", re_password: "", email: "", showForm: false})

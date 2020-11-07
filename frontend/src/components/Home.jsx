@@ -82,16 +82,9 @@ export default class Home extends Component {
 
     render() {
         const { showCards, showExercises, showEquipment, showNutrition, exercises, equipment, ingredients, isLoading } = this.state
-        let {showUserProfile, showUserWorkouts, showUserMealPlans, showUserLogout, isLoggedIn} = this.props
-        let userInfo = {"user":
-            {
-                "username": "Jacob", 
-                "password":"JacobN1", 
-                "email": "Jacob@jacob.com",
-                "workouts": ["Chest", "Back", "Legs", "Calves", "Shoulders"],
-                "meals": ["Meal 1", "Meal 2", "Meal 3", "Meal 4", "Meal 5"]
-            }
-        }
+        let {userInfo, toggleUserProfile, showUserProfile, showUserWorkouts, showUserMealPlans, showUserLogout, isLoggedIn} = this.props
+        //console.log(userInfo)
+        
         return (
             <div id="home-container">
                 {isLoading ? 
@@ -128,6 +121,7 @@ export default class Home extends Component {
                     <div> 
                         <UserProfile 
                         showUserProfile={showUserProfile}
+                        toggle={toggleUserProfile}
                         userInfo={userInfo}
                         />
                         <UserWorkouts 

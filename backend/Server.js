@@ -8,12 +8,16 @@ const { PORT } = process.env
 app.use(cookieParser())
 app.use(bodyParser.json())
 
-//MongoDB CRUD Functions ------------------------------------------------------------------------------------
-const {Login, addUser} = require('./dbFunctions')
+//MongoDB CRUD Functions -----------------------------------------------------
+const {Login, Register, Authenticate, getUserInfo, Logout, addWorkout, addFood} = require('./dbFunctions')
+app.post('/getuserinfo', getUserInfo)
 app.post('/login', Login)
-app.post('/add_user', addUser)
+app.get('/logout', Logout)
+app.post('/register', Register)
+app.put('/add_workout', Authenticate, addWorkout)
+app.put('/add_food', Authenticate, addFood)
 
-//Request API Data ------------------------------------------------------------
+//Request API Data -----------------------------------------------------------
 const {getExercises, getEquipment, getIngredients} = require('./apiFunctions')
 app.get('/exercises', getExercises)
 app.get('/equipment', getEquipment)

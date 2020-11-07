@@ -5,21 +5,67 @@ const uri = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PW}@cluster0.zxtob.mongodb.
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt-nodejs')
+if (typeof localStorage === "undefined" || localStorage === null) {
+    var LocalStorage = require('node-localstorage').LocalStorage;
+    localStorage = new LocalStorage('./scratch');
+  }
+
+exports.addWorkout = async function(req, res){
+    try{
+        res.send({'message': 'adding workout'})
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.addFood = async function(req, res){
+    try{
+        res.send({'message': 'adding food'})
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.Authenticate = async function(req, res, next){
+    let accessToken = req.header('jwt')
+    if(!accessToken) return res.status(401).send({"message": "No token found"})
+    try{
+        let verified = jwt.verify(accessToken, ACCESS_TOKEN_SECRET)
+        req.verified_user = verified
+        res.send({"message": "ok", "data": verified})
+        next()
+    }
+    catch(e){
+        return res.status(400).send({"message": "Invalid token / User not logged in"})
+    }
+}
+
+exports.getUserInfo = async function(req, res){
+    let {username} = req.body
+    try{
+        let user = await client.db('fitness-app').collection('users').findOne({"username": username})
+        res.send({'message':'ok', 'data': {"user":user}})
+    }
+    catch(e){
+        return res.status(400).send({"message": "Failed to retrieve user info"})
+    }
+}
 
 exports.Login = async function(req, res){
     let {username, password} = req.body
-
     try{
         await client.connect()
         let user = await client.db('fitness-app').collection('users').findOne({"username": username})
         const pw_match = bcrypt.compareSync(password, user.password)      
         if(user !== null && pw_match){
-            // let refreshToken = jwt.sign(user, REFRESH_TOKEN_SECRET, {algorithm: "HS256", expiresIn: REFRESH_TOKEN_LIFE})
-            // await client.db('fitness-app').collection('users').updateOne({"username": username}, {$set: {"refreshToken": refreshToken}})
             let accessToken = jwt.sign({"username":user.username}, ACCESS_TOKEN_SECRET, {algorithm: "HS256", expiresIn: ACCESS_TOKEN_LIFE})
-            res.cookie("jwt", accessToken, {httpOnly: true})
-            res.send({'message':'ok', 'data': {"user":user , "cookie": req.cookies}})// <--- req.cookie is causing server crash, figure out how to show cookies..
-            client.close()
+            res.header("jwt", accessToken)
+            // res.cookie("jwt", accessToken, {httpOnly: true})
+            localStorage.setItem('jwt', accessToken)
+            res.send({'message':'ok', 'data': {"user":user, "token": accessToken}})
+            //client.close()
         }
         else res.send({'message': 'Invalid Credentials'})
     }
@@ -28,7 +74,12 @@ exports.Login = async function(req, res){
     }
 }
 
- exports.addUser = async function(req, res){
+exports.Logout = async function(req, res){
+    localStorage.removeItem('jwt')
+    res.send({'message':'Logged out'})
+}
+
+ exports.Register = async function(req, res){
     let {username, password, re_password, email} = req.body
     let encrypted_pw = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
     const pw_regex = password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/)
@@ -90,6 +141,8 @@ exports.Login = async function(req, res){
     }
 }
 
+
+
 //Helper Funcions ------------------------------------------------------------------------------------
 async function checkUserExists(username){
     let usernames = []
@@ -106,19 +159,3 @@ async function checkUserExists(username){
     else return true
 }
 
-exports.verifyUserLoggedIn = async function(req, res, next){
-    let accessToken = req.cookies.jwt
-    //let {username} = req.body
-    if(!accessToken) return res.send({"message": "No token found"})
-    let payload
-    try{
-        payload = jwt.verify(accessToken, ACCESS_TOKEN_SECRET)
-        res.send({"message": "ok", "data": payload})
-        // let accessToken = jwt.sign({"username":user.username}, ACCESS_TOKEN_SECRET, {algorithm: "HS256", expiresIn: ACCESS_TOKEN_LIFE})
-        // res.cookie("jwt", accessToken, {httpOnly: true})
-        next()
-    }
-    catch(e){
-        return res.send({"message": "Invalid token / User not logged in"})
-    }
-}

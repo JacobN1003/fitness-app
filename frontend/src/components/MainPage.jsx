@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import NavigationBar from './NavigationBar'
 import Home from './Home'
+import axios from 'axios'
 
 export default class MainPage extends Component {
     constructor(props){
@@ -16,8 +17,23 @@ export default class MainPage extends Component {
         this.toggleUserMealPlans = this.toggleUserMealPlans.bind(this)
         this.toggleUserProfile = this.toggleUserProfile.bind(this)
         this.toggleUserWorkouts = this.toggleUserWorkouts.bind(this)
-        this.toggleUserlogout = this.toggleUserlogout.bind(this)
+        this.userlogout = this.userlogout.bind(this)
         this.onUserLogin = this.onUserLogin.bind(this)
+    }
+
+    componentDidMount(){
+       let username = localStorage.getItem('username')
+       //console.log(username)
+       if(username){
+            try{
+                axios.post("/getuserinfo", {"username": username})
+                .then(response => {
+                    if(response.data.message === "ok") this.setState({userInfo: response.data.data, isLoggedIn: true})
+                    else console.log(response.data.message)
+                })
+            }
+            catch(err){ console.log(err) }
+       }
     }
 
     toggleUserProfile = () =>{
@@ -32,27 +48,35 @@ export default class MainPage extends Component {
         this.setState({showUserMealPlans: !this.state.showUserMealPlans})
     }
 
-    toggleUserlogout = () =>{
-        this.setState({showUserLogout: !this.state.showUserLogout})
+    userlogout = () =>{
+        this.setState({userInfo:{}, isLoggedIn: false})
+        localStorage.removeItem('username')
+        try{axios.get("/logout").then(response => {console.log(response.data.message)})}
+        catch(err){ console.log(err) }
     }
 
     onUserLogin = (user, isLoggedIn) =>{
         this.setState({userInfo: user, isLoggedIn: isLoggedIn})
+        localStorage.setItem('username', user.user.username)
     }
+
 
     render() {
         let {showUserProfile, showUserWorkouts, showUserMealPlans, showUserLogout, userInfo, isLoggedIn} = this.state
-        console.log(userInfo, isLoggedIn)
+        //console.log(userInfo, isLoggedIn)
         return (
             <div>
                 <NavigationBar 
                     toggleUserMealPlans = {this.toggleUserMealPlans}
                     toggleUserProfile={this.toggleUserProfile}
                     toggleUserWorkouts={this.toggleUserWorkouts}
-                    toggleUserLogout={this.toggleUserlogout}
+                    userLogout={this.userlogout}
                     onUserLogin={this.onUserLogin}
+                    isLoggedIn={isLoggedIn}
+                    userInfo={userInfo}
                 />
                 <Home 
+                    toggleUserProfile={this.toggleUserProfile}
                     showUserProfile={showUserProfile} 
                     showUserWorkouts={showUserWorkouts} 
                     showUserMealPlans={showUserMealPlans} 

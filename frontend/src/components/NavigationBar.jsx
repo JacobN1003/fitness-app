@@ -4,8 +4,8 @@ import '../css/navigationbar.css'
 import LoginForm from './LoginForm.jsx'
 import NewUserForm from './NewUserForm.jsx'
 import ForgotPasswordForm from './ForgotPasswordForm.jsx'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faUserCircle} from '@fortawesome/free-solid-svg-icons'
+// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+// import {faUserCircle} from '@fortawesome/free-solid-svg-icons'
 
 export default class NavigationBar extends Component {
     constructor(props){
@@ -23,7 +23,7 @@ export default class NavigationBar extends Component {
         this.openForgotPasswordModal = this.openForgotPasswordModal.bind(this)
         this.toggleToolTip = this.toggleToolTip.bind(this)
         this.setUserInfo = this.setUserInfo.bind(this)
-        
+        this.userLogout = this.userLogout.bind(this)
     }
 
     openLoginModal = () => {
@@ -49,11 +49,15 @@ export default class NavigationBar extends Component {
         this.props.onUserLogin(user, this.state.isLoggedIn)
     }
 
+    userLogout = () =>{
+        this.props.userLogout()
+    }
     
 
     render() {
-        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen, isLoggedIn } = this.state
-       
+        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen} = this.state
+        const {isLoggedIn, userInfo} = this.props
+       //console.log(userInfo)
         return (
             <div>
                 <Navbar color="dark" dark>
@@ -64,12 +68,12 @@ export default class NavigationBar extends Component {
                     {!isLoggedIn && <Button color="primary" className="mr-2" onClick={this.openLoginModal}> Login </Button>}
                     {isLoggedIn && 
                         <UncontrolledDropdown >
-                            <DropdownToggle> 
-                                <FontAwesomeIcon icon={faUserCircle} size="2x"/>
+                            <DropdownToggle color="success"> 
+                               {userInfo.user.username}
                             </DropdownToggle>
                             <DropdownMenu right>
                                 <DropdownItem onClick={this.props.toggleUserProfile}> Profile </DropdownItem>
-                                <DropdownItem onClick={this.props.toggleUserLogout} > Logout </DropdownItem>
+                                <DropdownItem onClick={this.userLogout} > Logout </DropdownItem>
                             </DropdownMenu>
                         </UncontrolledDropdown>}
                 </Navbar>

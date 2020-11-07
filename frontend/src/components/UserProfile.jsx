@@ -55,13 +55,13 @@ export default class UserProfile extends Component {
     }
 
     render() {
-        let {showUserProfile, userInfo}=this.props
+        let {showUserProfile, userInfo, toggle}=this.props
         let {showChangeUsername, showChangeEmail, showChangePassword}=this.state
         return (
             <Modal backdrop={true} isOpen={showUserProfile}>
-                <ModalHeader charCode="x">
+                <ModalHeader toggle={toggle} charCode="x">
                     {userInfo.user.username}'s Profile
-                </ModalHeader>
+                </ModalHeader >
                 <ModalBody id="user-profile-body" >
                     <Form>
                         <FormGroup>
