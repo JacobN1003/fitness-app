@@ -4,6 +4,7 @@ import '../css/navigationbar.css'
 import LoginForm from './LoginForm.jsx'
 import NewUserForm from './NewUserForm.jsx'
 import ForgotPasswordForm from './ForgotPasswordForm.jsx'
+import LogoutForm from './LogoutForm.jsx'
 // import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 // import {faUserCircle} from '@fortawesome/free-solid-svg-icons'
 
@@ -16,7 +17,8 @@ export default class NavigationBar extends Component {
             forgotPasswordModal: false,
             tooltipOpen: false,
             userInfo: {},
-            isLoggedIn: false
+            isLoggedIn: false,
+            showLogout: false
         }
         this.openLoginModal = this.openLoginModal.bind(this)
         this.openNewUserModal = this.openNewUserModal.bind(this)
@@ -24,6 +26,7 @@ export default class NavigationBar extends Component {
         this.toggleToolTip = this.toggleToolTip.bind(this)
         this.setUserInfo = this.setUserInfo.bind(this)
         this.userLogout = this.userLogout.bind(this)
+        this.toggleLogoutModal = this.toggleLogoutModal.bind(this)
     }
 
     openLoginModal = () => {
@@ -51,11 +54,15 @@ export default class NavigationBar extends Component {
 
     userLogout = () =>{
         this.props.userLogout()
+        this.setState({showLogout: !this.state.showLogout})
     }
     
+    toggleLogoutModal = () =>{
+        this.setState({showLogout: !this.state.showLogout})
+    }
 
     render() {
-        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen} = this.state
+        const { loginModal, newUserModal, forgotPasswordModal, tooltipOpen, showLogout} = this.state
         const {isLoggedIn, userInfo} = this.props
        //console.log(userInfo)
         return (
@@ -90,6 +97,10 @@ export default class NavigationBar extends Component {
                 <ForgotPasswordForm 
                     forgotPasswordModal={forgotPasswordModal} 
                     openForgotPasswordModal={this.openForgotPasswordModal}
+                    />
+                <LogoutForm 
+                    toggle={this.toggleLogoutModal}
+                    showLogout={showLogout}
                     />
                 
             </div>

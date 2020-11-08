@@ -6,7 +6,8 @@ export default class Ingredient extends Component {
     constructor(props){
         super(props)
         this.state = {
-           isOpen: this.props.isOpen
+           isOpen: this.props.isOpen,
+           added: false
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.addFood = this.addFood.bind(this)
@@ -22,15 +23,17 @@ export default class Ingredient extends Component {
             .then(response => {
                 this.props.updateUser(response.data.data.value)
             })
+        this.setState({added: true})
     }
 
     render() {
-        let {info} = this.props
+        let {info, fromProfile} = this.props
+        let {added} = this.state
         return (
             <div>
-                <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} >
+                <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} style={{width: '400px'}}>
                     <ModalHeader toggle={this.toggleModal} charCode="x">{info.name}</ModalHeader>
-                    <ModalBody id="modal_body">
+                    <ModalBody id="modal_body" style={{backgroundColor:"rgb(24, 24, 24)", color:'white'}}>
                         <h2>Nutrition Facts</h2>
                         <p>Total Fat {' ' + info.fat.substring(0, info.fat.length - 2) + 'g'} </p>
                         <p>{' '}Saturated Fat{' ' + info.fat_saturated.substring(0, info.fat_saturated.length - 2) + 'g'}</p>
@@ -39,9 +42,14 @@ export default class Ingredient extends Component {
                         <p>{' '}Dietary Fiber{' ' + info.fibres.substring(0, info.fibres.length - 2) + 'g'}</p>
                         <p>Protein{' '+ info.protein.substring(0, info.protein.length - 2) + ' g'}</p>
                     </ModalBody>
-                    <ModalFooter>
-                        <Button onClick={this.addFood}>Add To Your Meals</Button>
-                    </ModalFooter>
+                    {!fromProfile && <ModalFooter>
+                        <Button 
+                            disabled={added}
+                            color={added ? "success" : "primary"} 
+                            onClick={this.addFood}>
+                                {added ? "Personal Meals Updated!":"Add To Your Meals"}
+                        </Button>
+                    </ModalFooter>}
                 </Modal>
             </div>
         )

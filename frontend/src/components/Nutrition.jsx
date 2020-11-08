@@ -63,7 +63,7 @@ export default class Nutrition extends Component {
                         </ListGroupItem>
                     ))}
                 </ListGroup>
-                {showIngredient && <Ingredient updateUser={updateUser} userInfo={userInfo} info={ingredientInfo} isOpen={showIngredient}/>}
+                {showIngredient && <Ingredient updateUser={updateUser} fromProfile={false} userInfo={userInfo} info={ingredientInfo} isOpen={showIngredient}/>}
             </Container>
         )
     }

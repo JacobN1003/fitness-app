@@ -7,7 +7,8 @@ export default class Exercise extends Component {
     constructor(props){
         super(props)
         this.state ={
-            isOpen: this.props.isOpen
+            isOpen: this.props.isOpen,
+            added: false
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.formatDescription = this.formatDescription.bind(this)
@@ -33,10 +34,12 @@ export default class Exercise extends Component {
             .then(response => {
                 this.props.updateUser(response.data.data.value)
             })
+            this.setState({added: true})
     }
 
     render() {
         const {info, fromProfile} = this.props
+        let {added} = this.state
         return (
             <div id="exercise">
                 <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} >
@@ -60,7 +63,12 @@ export default class Exercise extends Component {
                     </ModalBody>
                     {!fromProfile && 
                         <ModalFooter>
-                            <Button onClick={this.addExercise} color="success">Add To Your Workouts</Button>
+                            <Button 
+                            disabled={added}
+                            color={added ? "success" : "primary"} 
+                            onClick={this.addExercise} >
+                                {added ? "Personal Workouts Updated!":"Add To Your Workouts"}
+                            </Button>
                         </ModalFooter>}
                 </Modal>
             </div>

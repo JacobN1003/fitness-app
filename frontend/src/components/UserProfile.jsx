@@ -182,7 +182,7 @@ export default class UserProfile extends Component {
                                 </Row>
                                 ))}
                         </ListGroup>
-                        {showMeal && <Ingredient info={mealInfo} isOpen={showMeal}/>}
+                        {showMeal && <Ingredient fromProfile={true} info={mealInfo} isOpen={showMeal}/>}
                     </div>
                 </ModalBody>
             </Modal>
