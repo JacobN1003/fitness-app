@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import {Modal, ModalHeader, ModalBody, Button, Form, FormGroup, Label, Input, 
-    Collapse, InputGroup, ListGroup, ListGroupItem } from 'reactstrap'
+    Collapse, InputGroup, ListGroup, ListGroupItem, Row, Col } from 'reactstrap'
 import '../css/userprofile.css'
+import Exercise from './Exercise.jsx'
+import Ingredient from './Ingredient.jsx'
+import axios from 'axios'
 
 export default class UserProfile extends Component {
     constructor(props){
@@ -15,6 +18,10 @@ export default class UserProfile extends Component {
             showChangeEmail: false,
             showError: false,
             error: "",
+            showExercise: false,
+            exerciseInfo: {},
+            showMeal: false,
+            mealInfo: {}
         }
         this.toggleChangeUsername = this.toggleChangeUsername.bind(this)
         this.toggleChangeEmail = this.toggleChangeEmail.bind(this)
@@ -22,6 +29,14 @@ export default class UserProfile extends Component {
         this.submitNewUsername = this.submitNewUsername.bind(this)
         this.submitNewEmail = this.submitNewEmail.bind(this)
         this.submitNewPassword = this.submitNewPassword.bind(this)
+        this.onExerciseClick = this.onExerciseClick.bind(this)
+        this.onMealClick = this.onMealClick.bind(this)
+        this.removeWorkout = this.removeWorkout.bind(this)
+        this.removeFood = this.removeFood.bind(this)
+    }
+
+    componentDidUpdate(prevProps){
+        if(this.props.userInfo !== prevProps.userInfo) console.log("stuff changed")
     }
 
     handleChange = (e) =>{
@@ -54,9 +69,34 @@ export default class UserProfile extends Component {
         this.setState({showChangePassword: false})
     }
 
+    onExerciseClick = (each) =>{
+        this.setState({showExercise: !this.state.showExercise, exerciseInfo: each})
+    }
+
+    onMealClick = (each) =>{
+        this.setState({showMeal: !this.state.showMeal, mealInfo: each})
+    }
+
+    removeWorkout = (each) =>{
+        let {userInfo} = this.props
+        axios.put('remove_workout', {"username": userInfo.user.username, "workout": each.name})
+            .then(response => {
+                this.props.updateUser(response.data.data.value)
+            })
+    }
+
+    removeFood = (each) =>{
+        let {userInfo} = this.props
+        axios.put('remove_food', {"username": userInfo.user.username, "food": each.name})
+            .then(response => {
+                this.props.updateUser(response.data.data.value)
+            })
+
+    }
+
     render() {
         let {showUserProfile, userInfo, toggle}=this.props
-        let {showChangeUsername, showChangeEmail, showChangePassword}=this.state
+        let {showChangeUsername, showChangeEmail, showChangePassword, exerciseInfo, mealInfo, showExercise, showMeal}=this.state
         return (
             <Modal backdrop={true} isOpen={showUserProfile}>
                 <ModalHeader toggle={toggle} charCode="x">
@@ -111,20 +151,38 @@ export default class UserProfile extends Component {
                         <Label>Personal Workouts</Label>
                         <ListGroup id="workouts-col">
                             {userInfo.user.workouts.map((each, id) => (
-                                <ListGroupItem key={id} id="workouts" tag="button"> 
-                                    {each}
-                                </ListGroupItem>
+                                <Row id="row_layout" key={id} >
+                                    <ListGroupItem 
+                                        xs="10"
+                                        style={{backgroundColor:"lightgrey"}} 
+                                        id="workouts" 
+                                        tag="button" 
+                                        onClick={()=>this.onExerciseClick(each)}> 
+                                            <span style={{}}>{each.name}</span>
+                                    </ListGroupItem>
+                                    <ListGroupItem id="workoutsx" xs="2" tag="button" onClick={()=>this.removeWorkout(each)}>x</ListGroupItem>
+                                </Row>
                             ))}
                         </ListGroup>
+                        {showExercise && <Exercise fromProfile={true} info={exerciseInfo} isOpen={showExercise}/>}
                         <br/>
                         <Label>Personal Meals</Label>
                         <ListGroup id="meals-col">
                             {userInfo.user.meals.map((each, id) => (
-                                    <ListGroupItem key={id} id="meals" tag="button"> 
-                                        {each}
+                                <Row id="row_layout" key={id} >
+                                    <ListGroupItem 
+                                        xs="10"
+                                        style={{backgroundColor:"lightgrey"}} 
+                                        id="meals" 
+                                        tag="button" 
+                                        onClick={()=>this.onMealClick(each)}> 
+                                            <span>{each.name}</span>
                                     </ListGroupItem>
+                                    <ListGroupItem id="mealsx" xs="2" tag="button" onClick={()=>this.removeFood(each)} >x</ListGroupItem>
+                                </Row>
                                 ))}
                         </ListGroup>
+                        {showMeal && <Ingredient info={mealInfo} isOpen={showMeal}/>}
                     </div>
                 </ModalBody>
             </Modal>

@@ -7,3 +7,28 @@
     
     background-color: rgb(74, 74, 74);
 }
+
+#row_layout{
+    
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+#meals{
+    width:86%;
+}
+
+#workouts{
+    width:86%;
+}
+
+#workoutsx{
+    background-color: rgb(138, 39, 39);
+    color: white;
+    
+}
+
+#mealsx{
+    background-color: rgb(138, 39, 39);
+    color: white;
+}

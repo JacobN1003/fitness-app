@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import {Modal, ModalBody, ModalHeader} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader, ModalFooter, Button} from 'reactstrap'
+import axios from 'axios'
 
 export default class Ingredient extends Component {
     constructor(props){
@@ -8,10 +9,19 @@ export default class Ingredient extends Component {
            isOpen: this.props.isOpen
         }
         this.toggleModal = this.toggleModal.bind(this)
+        this.addFood = this.addFood.bind(this)
     }
 
     toggleModal = () => {
         this.setState({isOpen: !this.state.isOpen})
+    }
+
+    addFood = () =>{
+        let {info, userInfo} = this.props
+        axios.put('add_food', {"username": userInfo.user.username, "food": info})
+            .then(response => {
+                this.props.updateUser(response.data.data.value)
+            })
     }
 
     render() {
@@ -29,6 +39,9 @@ export default class Ingredient extends Component {
                         <p>{' '}Dietary Fiber{' ' + info.fibres.substring(0, info.fibres.length - 2) + 'g'}</p>
                         <p>Protein{' '+ info.protein.substring(0, info.protein.length - 2) + ' g'}</p>
                     </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={this.addFood}>Add To Your Meals</Button>
+                    </ModalFooter>
                 </Modal>
             </div>
         )

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import {Modal, ModalBody, ModalHeader} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader, ModalFooter, Button} from 'reactstrap'
 import '../css/exercise.css'
+import axios from 'axios'
 
 export default class Exercise extends Component {
     constructor(props){
@@ -10,6 +11,7 @@ export default class Exercise extends Component {
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.formatDescription = this.formatDescription.bind(this)
+        this.addExercise = this.addExercise.bind(this)
     }
 
     toggleModal = () => {
@@ -25,8 +27,16 @@ export default class Exercise extends Component {
         return newdata
     }
 
+    addExercise = () =>{
+        let {info, userInfo} = this.props
+        axios.put('add_workout', {"username": userInfo.user.username, "exercise": info})
+            .then(response => {
+                this.props.updateUser(response.data.data.value)
+            })
+    }
+
     render() {
-        const {info} = this.props
+        const {info, fromProfile} = this.props
         return (
             <div id="exercise">
                 <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} >
@@ -48,9 +58,10 @@ export default class Exercise extends Component {
                             <ul key={id}> {equipment.name} </ul>
                         ))}
                     </ModalBody>
-                    {/* <ModalFooter>
-                        <Button onClick={this.toggleModal}>More Info</Button>
-                    </ModalFooter> */}
+                    {!fromProfile && 
+                        <ModalFooter>
+                            <Button onClick={this.addExercise} color="success">Add To Your Workouts</Button>
+                        </ModalFooter>}
                 </Modal>
             </div>
         )

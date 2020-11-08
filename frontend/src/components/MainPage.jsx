@@ -19,14 +19,20 @@ export default class MainPage extends Component {
         this.toggleUserWorkouts = this.toggleUserWorkouts.bind(this)
         this.userlogout = this.userlogout.bind(this)
         this.onUserLogin = this.onUserLogin.bind(this)
+        this.getUser = this.getUser.bind(this)
+        this.updateUser = this.updateUser.bind(this)
     }
 
     componentDidMount(){
-       let username = localStorage.getItem('username')
+       this.getUser()
+    }
+
+    getUser = () =>{
+        let username = localStorage.getItem('username')
        //console.log(username)
        if(username){
             try{
-                axios.post("/getuserinfo", {"username": username})
+                axios.post("/getuser", {"username": username})
                 .then(response => {
                     if(response.data.message === "ok") this.setState({userInfo: response.data.data, isLoggedIn: true})
                     else console.log(response.data.message)
@@ -34,6 +40,10 @@ export default class MainPage extends Component {
             }
             catch(err){ console.log(err) }
        }
+    }
+
+    updateUser = (user) =>{
+        this.setState({userInfo: {'user': user}})
     }
 
     toggleUserProfile = () =>{
@@ -83,6 +93,7 @@ export default class MainPage extends Component {
                     showUserLogout={showUserLogout}
                     userInfo={userInfo}
                     isLoggedIn={isLoggedIn}
+                    updateUser={this.updateUser}
                 />
             </div>
         )

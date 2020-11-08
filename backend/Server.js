@@ -9,13 +9,16 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 
 //MongoDB CRUD Functions -----------------------------------------------------
-const {Login, Register, Authenticate, getUserInfo, Logout, addWorkout, addFood} = require('./dbFunctions')
-app.post('/getuserinfo', getUserInfo)
+const {Login, Register, Authenticate, getUser, Logout, 
+        addWorkout, addFood, removeWorkout, removeFood} = require('./dbFunctions')
+app.post('/getuser', getUser)
 app.post('/login', Login)
 app.get('/logout', Logout)
 app.post('/register', Register)
-app.put('/add_workout', Authenticate, addWorkout)
-app.put('/add_food', Authenticate, addFood)
+app.put('/add_workout', addWorkout)
+app.put('/add_food', addFood)
+app.put('/remove_workout', removeWorkout)
+app.put('/remove_food', removeFood)
 
 //Request API Data -----------------------------------------------------------
 const {getExercises, getEquipment, getIngredients} = require('./apiFunctions')

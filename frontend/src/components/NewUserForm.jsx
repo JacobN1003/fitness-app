@@ -31,7 +31,7 @@ export default class NewUserForm extends Component {
             .then(response => {
                 if(response.data.message === "ok"){
                     this.setState({username: "", password: "", re_password: "", email: "", showForm: false})
-                    console.log(response.data)
+                    //console.log(response.data)
                 }
                 else{
                     this.setState({showError: true, error: response.data.message})

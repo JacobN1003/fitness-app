@@ -81,8 +81,10 @@ export default class Home extends Component {
         }
 
     render() {
-        const { showCards, showExercises, showEquipment, showNutrition, exercises, equipment, ingredients, isLoading } = this.state
-        let {userInfo, toggleUserProfile, showUserProfile, showUserWorkouts, showUserMealPlans, showUserLogout, isLoggedIn} = this.props
+        const { showCards, showExercises, showEquipment, showNutrition, 
+                exercises, equipment, ingredients, isLoading } = this.state
+        let {userInfo, toggleUserProfile, showUserProfile, showUserWorkouts, 
+                showUserMealPlans, showUserLogout, isLoggedIn, updateUser} = this.props
         //console.log(userInfo)
         
         return (
@@ -103,7 +105,10 @@ export default class Home extends Component {
                     {showExercises &&  
                         <Exercises 
                             toggleExercises={this.toggleExercises} 
-                            exercises={exercises}/>
+                            exercises={exercises}
+                            userInfo={userInfo}
+                            updateUser={updateUser}
+                            />
                     }
                     {showEquipment &&
                         <Equipment
@@ -114,12 +119,15 @@ export default class Home extends Component {
                         <Nutrition
                             toggleNutrition={this.toggleNutrition}
                             ingredients={ingredients}
+                            userInfo={userInfo}
+                            updateUser={updateUser}
                         />}
                 </div>}
                 
                 {isLoggedIn && 
                     <div> 
                         <UserProfile 
+                        updateUser={updateUser}
                         showUserProfile={showUserProfile}
                         toggle={toggleUserProfile}
                         userInfo={userInfo}

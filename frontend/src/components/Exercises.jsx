@@ -123,7 +123,7 @@ export default class Exercises extends Component {
     }
 
     render() {
-        const {toggleExercises} = this.props
+        const {toggleExercises, userInfo, updateUser} = this.props
         const {showExercise, exerciseInfo, showBtns, exerciseList} = this.state
         //console.log(showExercise)
         return (
@@ -173,7 +173,7 @@ export default class Exercises extends Component {
                                 </ListGroupItem>
                             ))}
                     </ListGroup>
-                {showExercise && <Exercise info={exerciseInfo} isOpen={showExercise}/>}
+                {showExercise && <Exercise updateUser={updateUser} fromProfile={false} userInfo={userInfo} info={exerciseInfo} isOpen={showExercise}/>}
             </Container>
         )
     }

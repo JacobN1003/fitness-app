@@ -10,9 +10,36 @@ if (typeof localStorage === "undefined" || localStorage === null) {
     localStorage = new LocalStorage('./scratch');
   }
 
-exports.addWorkout = async function(req, res){
+exports.removeWorkout = async function(req, res){
+    let {username, workout} = req.body
     try{
-        res.send({'message': 'adding workout'})
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$pull: {"workouts": {"name": workout}}}, {returnOriginal: false},
+                    (err, document)=>{ res.send({'message': 'removed workout', 'data': document}) })
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.removeFood = async function(req, res){
+    let {username, food} = req.body
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$pull: {"meals": {"name":food}}}, {returnOriginal: false},
+                    (err, document)=>{ res.send({'message': 'removed food', 'data': document})})
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.addWorkout = async function(req, res){
+    let {username, exercise} = req.body
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$push: {"workouts": exercise}}, {returnOriginal: false},
+                    (err, document)=>{res.send({'message': 'adding workout', 'data': document})})
     }
     catch(err){
         console.log(err)
@@ -20,8 +47,12 @@ exports.addWorkout = async function(req, res){
 }
 
 exports.addFood = async function(req, res){
+    let {username, food} = req.body
     try{
-        res.send({'message': 'adding food'})
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$push: {"meals": food}}, {returnOriginal: false},
+                    (err, document)=> {res.send({'message': 'adding food item', 'data': document})})
+        
     }
     catch(err){
         console.log(err)
@@ -42,7 +73,7 @@ exports.Authenticate = async function(req, res, next){
     }
 }
 
-exports.getUserInfo = async function(req, res){
+exports.getUser = async function(req, res){
     let {username} = req.body
     try{
         let user = await client.db('fitness-app').collection('users').findOne({"username": username})
