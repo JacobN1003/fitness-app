@@ -5,8 +5,7 @@ import LoginForm from './LoginForm.jsx'
 import NewUserForm from './NewUserForm.jsx'
 import ForgotPasswordForm from './ForgotPasswordForm.jsx'
 import LogoutForm from './LogoutForm.jsx'
-// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-// import {faUserCircle} from '@fortawesome/free-solid-svg-icons'
+
 
 export default class NavigationBar extends Component {
     constructor(props){

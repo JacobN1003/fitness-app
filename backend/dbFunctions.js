@@ -10,6 +10,42 @@ if (typeof localStorage === "undefined" || localStorage === null) {
     localStorage = new LocalStorage('./scratch');
   }
 
+exports.changeUsername = async function (req, res){
+    let {username, updated_username} = req.body
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$set: {"username": updated_username}}, {returnOriginal: false},
+                    (err, document)=>{ res.send({'message': 'username updated', 'data': document}) })
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.changeEmail = async function (req, res){
+    let {username, updated_email} = req.body
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$set: {"email": updated_email}}, {returnOriginal: false},
+                    (err, document)=>{ res.send({'message': 'email updated', 'data': document}) })
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.changePassword = async function (req, res){
+    let {username, updated_password} = req.body
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$set: {"password": updated_password}}, {returnOriginal: false},
+                    (err, document)=>{ res.send({'message': 'email updated', 'data': document}) })
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
 exports.removeWorkout = async function(req, res){
     let {username, workout} = req.body
     try{

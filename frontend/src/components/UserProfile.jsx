@@ -5,6 +5,8 @@ import '../css/userprofile.css'
 import Exercise from './Exercise.jsx'
 import Ingredient from './Ingredient.jsx'
 import axios from 'axios'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faEye } from '@fortawesome/free-solid-svg-icons'
 
 export default class UserProfile extends Component {
     constructor(props){
@@ -21,7 +23,8 @@ export default class UserProfile extends Component {
             showExercise: false,
             exerciseInfo: {},
             showMeal: false,
-            mealInfo: {}
+            mealInfo: {},
+            showPassword: false
         }
         this.toggleChangeUsername = this.toggleChangeUsername.bind(this)
         this.toggleChangeEmail = this.toggleChangeEmail.bind(this)
@@ -33,6 +36,7 @@ export default class UserProfile extends Component {
         this.onMealClick = this.onMealClick.bind(this)
         this.removeWorkout = this.removeWorkout.bind(this)
         this.removeFood = this.removeFood.bind(this)
+        this.showPassword = this.showPassword.bind(this)
     }
 
     componentDidUpdate(prevProps){
@@ -59,14 +63,32 @@ export default class UserProfile extends Component {
 
     submitNewUsername = () =>{
         this.setState({showChangeUsername: false})
+        let {userInfo} = this.props
+        axios.put('change_username', 
+            {"username": userInfo.user.username, "updated_username": this.state.new_username})
+            .then(response => {
+                this.props.updateUser(response.data.data.value)
+            })
     }
 
     submitNewEmail = () =>{
         this.setState({showChangeEmail: false})
+        let {userInfo} = this.props
+        axios.put('change_email', 
+            {"username": userInfo.user.username, "updated_email": this.state.new_email})
+            .then(response => {
+                this.props.updateUser(response.data.data.value)
+            })
     }
 
     submitNewPassword = () =>{
         this.setState({showChangePassword: false})
+        let {userInfo} = this.props
+        axios.put('change_password', 
+            {"username": userInfo.user.username, "updated_password": this.state.updated_password})
+            .then(response => {
+                this.props.updateUser(response.data.data.value)
+            })
     }
 
     onExerciseClick = (each) =>{
@@ -94,9 +116,14 @@ export default class UserProfile extends Component {
 
     }
 
+    showPassword = () =>{
+        this.setState({showPassword: !this.state.showPassword})
+    }
+
     render() {
         let {showUserProfile, userInfo, toggle}=this.props
-        let {showChangeUsername, showChangeEmail, showChangePassword, exerciseInfo, mealInfo, showExercise, showMeal}=this.state
+        let {showChangeUsername, showChangeEmail, showChangePassword, exerciseInfo, mealInfo, 
+            showExercise, showMeal, showPassword}=this.state
         return (
             <Modal backdrop={true} isOpen={showUserProfile}>
                 <ModalHeader toggle={toggle} charCode="x">
@@ -105,7 +132,6 @@ export default class UserProfile extends Component {
                 <ModalBody id="user-profile-body" >
                     <Form>
                         <FormGroup>
-                                                {/* userInfo.user.username */}
                             <Label>{"Username: "}{userInfo.user.username}</Label> 
                             <Button className="float-right" onClick={this.toggleChangeUsername}>
                                 {showChangeUsername ? "Cancel" : "Change"}
@@ -126,8 +152,11 @@ export default class UserProfile extends Component {
                             <Collapse isOpen={showChangePassword}>
                             <br/>
                                 <InputGroup>
-                                    <Input type="password" name="new_password" onChange={this.handleChange}/>
+                                    <Input type={showPassword ? "password" : "text"} name="new_password" onChange={this.handleChange}/>
                                     <Button color="primary" onClick={this.submitNewPassword}>Save</Button>
+                                    <Button color="warning" onClick={this.showPassword}>
+                                        <FontAwesomeIcon icon={faEye}/>
+                                    </Button>
                                 </InputGroup>
                             </Collapse>
                         </FormGroup>
