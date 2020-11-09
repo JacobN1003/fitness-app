@@ -2,28 +2,34 @@ import React, { Component } from 'react'
 import {Container, Row, Col, Card, CardImg, CardImgOverlay, CardTitle, Button} from 'reactstrap'
 import equipmentImg from "../imgs/equipment.jpg"
 import '../css/equipment.css'
+import EachEquipment from './EachEquipment.jsx'
 
 export default class Equipment extends Component {
     constructor(props){
         super(props)
         this.state={
-            equipment: []
+            equipment: [],
+            equipInfo: {},
+            showInfo: false
         }
         this.eachEquipment = this.eachEquipment.bind(this)
     }
 
-    eachEquipment = (data) => {
-        console.log(data)
+    eachEquipment = (equipment) => {
+        this.setState({showInfo: !this.state.showInfo, equipInfo: equipment})
     }
 
     render() {
         const {equipment, toggleEquipment} = this.props
-        //console.log(equipment)
+        const {equipInfo, showInfo} = this.state
+        console.log(equipInfo)
         return (
             <div id="outer-container">
-                {/* <p id="title">Equipment</p> */}
                 <Container id="equipment-container">
-                <Button color="info" size="sm" style={{borderRadius:'10px', marginRight: '10px'}} onClick={toggleEquipment}>&lt;-</Button>
+                    <Row style={{textAlign:"center"}}>
+                        <Button color="info" size="sm" style={{borderRadius:'10px', marginRight: '10px'}} onClick={toggleEquipment}>&lt;-</Button>
+                    </Row>
+                    <br/>
                     <Row id="equipment-row" md="3">
                             {equipment.map((equipment, id)=>(
                                 <div key={id}>
@@ -40,6 +46,7 @@ export default class Equipment extends Component {
                             ))}
                     </Row>
                 </Container>
+                <EachEquipment toggle={this.eachEquipment} showInfo={showInfo} equipInfo={equipInfo}/>
             </div>
         )
     }
