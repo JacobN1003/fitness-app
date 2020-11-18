@@ -12,22 +12,47 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 
 exports.changeUsername = async function (req, res){
     let {username, updated_username} = req.body
-    try{
-        await client.db('fitness-app').collection('users')
-                    .findOneAndUpdate({"username": username}, {$set: {"username": updated_username}}, {returnOriginal: false},
-                    (err, document)=>{ res.send({'message': 'username updated', 'data': document}) })
+    if(updated_username === ""){
+        res.send({'message':"Enter a username"})
+        return
     }
-    catch(err){
-        console.log(err)
+    if(updated_username.length < 5){
+        res.send({'message': "Username needs to be at least 5 characters"})
+        return
+    }
+    let goodUser = await checkUserExists(updated_username)
+    if(goodUser){
+        try{
+            await client.db('fitness-app').collection('users')
+                        .findOneAndUpdate({"username": username}, {$set: {"username": updated_username}}, {returnOriginal: false},
+                        (err, document)=>{ res.send({'message': 'ok', 'success': "Successfully Updated Username!",'data': document}) })
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+    else {
+        res.send({'message': "Username already exists"})
+        return
     }
 }
 
 exports.changeEmail = async function (req, res){
     let {username, updated_email} = req.body
+    const email_regex = updated_email.match(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i)
+
+    if(updated_email === ""){
+        res.send({'message':"Enter an email address"})
+        return
+    }
+    if(email_regex === null){
+        res.send({'message':"Enter a valid Email address"})
+        return
+    }
     try{
         await client.db('fitness-app').collection('users')
                     .findOneAndUpdate({"username": username}, {$set: {"email": updated_email}}, {returnOriginal: false},
-                    (err, document)=>{ res.send({'message': 'email updated', 'data': document}) })
+                    (err, document)=>{ res.send({'message': 'ok', 'success': "Successfully Updated Email Address!", 'data': document}) })
     }
     catch(err){
         console.log(err)
@@ -36,10 +61,36 @@ exports.changeEmail = async function (req, res){
 
 exports.changePassword = async function (req, res){
     let {username, updated_password} = req.body
+    console.log(req.body)
+    let encrypted_pw = bcrypt.hashSync(updated_password, bcrypt.genSaltSync(8), null)
+    const pw_regex = updated_password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{5,}$/)
+    if(updated_password === ""){
+        res.send({'message':"Enter a password"})
+        return
+    }
+    if(pw_regex === null){
+        res.send({'message':"Passwords should contain at least one uppercase, one lowercase," +
+        " one number, and be at least 5 characters long"})
+        return
+    }
     try{
         await client.db('fitness-app').collection('users')
-                    .findOneAndUpdate({"username": username}, {$set: {"password": updated_password}}, {returnOriginal: false},
-                    (err, document)=>{ res.send({'message': 'email updated', 'data': document}) })
+                    .findOneAndUpdate({"username": username}, {$set: {"password": encrypted_pw}}, {returnOriginal: false},
+                    (err, document)=>{ res.send({'message': 'ok', 'success': "Successfully Updated Password!", 'data': document}) })
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+
+//-----------------------------------------------------------------------WORKOUTS
+exports.removeExercise = async function(req, res){
+    let {username, workout} = req.body
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$pull: {"workouts": {"name": workout} }}, {returnOriginal: false},
+                    (err, document)=>{ res.send({'message': 'removed workout', 'data': document}) })
     }
     catch(err){
         console.log(err)
@@ -49,6 +100,7 @@ exports.changePassword = async function (req, res){
 exports.removeWorkout = async function(req, res){
     let {username, workout} = req.body
     try{
+        await client.connect()
         await client.db('fitness-app').collection('users')
                     .findOneAndUpdate({"username": username}, {$pull: {"workouts": {"name": workout}}}, {returnOriginal: false},
                     (err, document)=>{ res.send({'message': 'removed workout', 'data': document}) })
@@ -58,9 +110,36 @@ exports.removeWorkout = async function(req, res){
     }
 }
 
+exports.createWorkout = async function(req, res){
+    let {username, new_workout} = req.body
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username}, {$push: {"workouts": {name: new_workout, exercises: []} }}, {returnOriginal: false},
+                    (err, document)=>{res.send({'message': 'adding workout', 'data': document})})
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+exports.addExercise = async function(req, res){
+    let {username, workout, exercise} = req.body
+    console.log("\n\nworkout: ", workout, ",  exercise: ", exercise)
+    try{
+        await client.db('fitness-app').collection('users')
+                    .findOneAndUpdate({"username": username, "workouts.name": workout}, {$push: {"workouts.$.exercises": exercise }}, {returnOriginal: false},
+                    (err, document)=>{res.send({'message': 'adding workout', 'data': document})})
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+//----------------------------------------------------------------------- NUTRITION
 exports.removeFood = async function(req, res){
     let {username, food} = req.body
     try{
+        await client.connect()
         await client.db('fitness-app').collection('users')
                     .findOneAndUpdate({"username": username}, {$pull: {"meals": {"name":food}}}, {returnOriginal: false},
                     (err, document)=>{ res.send({'message': 'removed food', 'data': document})})
@@ -70,12 +149,13 @@ exports.removeFood = async function(req, res){
     }
 }
 
-exports.addWorkout = async function(req, res){
-    let {username, exercise} = req.body
+exports.createMeal = async function(req, res){
+    let {username, meal} = req.body
     try{
         await client.db('fitness-app').collection('users')
-                    .findOneAndUpdate({"username": username}, {$push: {"workouts": exercise}}, {returnOriginal: false},
-                    (err, document)=>{res.send({'message': 'adding workout', 'data': document})})
+                    .findOneAndUpdate({"username": username}, {$push: {"meals": {name: meal, ingredients:[]}}}, {returnOriginal: false},
+                    (err, document)=> {res.send({'message': 'adding meal', 'data': document})})
+        
     }
     catch(err){
         console.log(err)
@@ -83,10 +163,10 @@ exports.addWorkout = async function(req, res){
 }
 
 exports.addFood = async function(req, res){
-    let {username, food} = req.body
+    let {username, meal, food} = req.body
     try{
         await client.db('fitness-app').collection('users')
-                    .findOneAndUpdate({"username": username}, {$push: {"meals": food}}, {returnOriginal: false},
+                    .findOneAndUpdate({"username": username, "meals.name": meal}, {$push: {"meals.$.ingredients": food }}, {returnOriginal: false},
                     (err, document)=> {res.send({'message': 'adding food item', 'data': document})})
         
     }
@@ -95,6 +175,8 @@ exports.addFood = async function(req, res){
     }
 }
 
+
+//----------------------------------------------------------------------- LOGIN/REGISTER
 exports.Authenticate = async function(req, res, next){
     let accessToken = req.header('jwt')
     if(!accessToken) return res.status(401).send({"message": "No token found"})
@@ -111,9 +193,11 @@ exports.Authenticate = async function(req, res, next){
 
 exports.getUser = async function(req, res){
     let {username} = req.body
+    console.log(username)
     try{
         let user = await client.db('fitness-app').collection('users').findOne({"username": username})
         res.send({'message':'ok', 'data': {"user":user}})
+        
     }
     catch(e){
         return res.status(400).send({"message": "Failed to retrieve user info"})
@@ -125,8 +209,13 @@ exports.Login = async function(req, res){
     try{
         await client.connect()
         let user = await client.db('fitness-app').collection('users').findOne({"username": username})
-        const pw_match = bcrypt.compareSync(password, user.password)      
-        if(user !== null && pw_match){
+        //client.close()
+        if(!user){
+            res.send({'message': 'Invalid Username'})
+            return
+        }
+        let pw_match = bcrypt.compareSync(password, user.password)
+        if(pw_match){
             let accessToken = jwt.sign({"username":user.username}, ACCESS_TOKEN_SECRET, {algorithm: "HS256", expiresIn: ACCESS_TOKEN_LIFE})
             res.header("jwt", accessToken)
             // res.cookie("jwt", accessToken, {httpOnly: true})
@@ -137,7 +226,7 @@ exports.Login = async function(req, res){
         else res.send({'message': 'Invalid Credentials'})
     }
     catch(err){ 
-        console.log(err) 
+        res.send(err)
     }
 }
 

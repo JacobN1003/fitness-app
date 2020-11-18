@@ -11,7 +11,12 @@ export default class MainPage extends Component {
             showUserWorkouts: false,
             showUserMealPlans: false,
             showUserLogout: false,
-            userInfo: {},
+            userInfo: {
+                'user': {
+                    'name': "",
+                    'workouts':[],
+                    'meals': []
+                }},
             isLoggedIn: false
         }
         this.toggleUserMealPlans = this.toggleUserMealPlans.bind(this)
@@ -29,17 +34,16 @@ export default class MainPage extends Component {
 
     getUser = () =>{
         let username = localStorage.getItem('username')
-       //console.log(username)
-       if(username){
-            try{
-                axios.post("/getuser", {"username": username})
-                .then(response => {
-                    if(response.data.message === "ok") this.setState({userInfo: response.data.data, isLoggedIn: true})
-                    else console.log(response.data.message)
-                })
-            }
-            catch(err){ console.log(err) }
-       }
+        if(username){
+                try{
+                    axios.post("/getuser", {"username": username})
+                    .then(response => {
+                        if(response.data.message === "ok") this.setState({userInfo: response.data.data, isLoggedIn: true})
+                        else console.log(response.data.message)
+                    })
+                }
+                catch(err){ console.log(err) }
+        }
     }
 
     updateUser = (user) =>{
@@ -59,7 +63,11 @@ export default class MainPage extends Component {
     }
 
     userlogout = () =>{
-        this.setState({userInfo:{}, isLoggedIn: false})
+        this.setState({userInfo:{'user': {
+            'name': "",
+            'workouts':[],
+            'meals': []
+        }}, isLoggedIn: false})
         localStorage.removeItem('username')
         try{axios.get("/logout").then(response => {console.log(response.data.message)})}
         catch(err){ console.log(err) }

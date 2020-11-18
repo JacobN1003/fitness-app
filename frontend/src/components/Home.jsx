@@ -108,6 +108,7 @@ export default class Home extends Component {
                             exercises={exercises}
                             userInfo={userInfo}
                             updateUser={updateUser}
+                            isLoggedIn={isLoggedIn}
                             />
                     }
                     {showEquipment &&
@@ -121,6 +122,7 @@ export default class Home extends Component {
                             ingredients={ingredients}
                             userInfo={userInfo}
                             updateUser={updateUser}
+                            isLoggedIn={isLoggedIn}
                         />}
                 </div>}
                 

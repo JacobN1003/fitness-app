@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import {Modal, ModalHeader, ModalBody, Button, Form, FormGroup, Label, Input, 
-    Collapse, InputGroup, ListGroup, ListGroupItem, Row, Col } from 'reactstrap'
+    Collapse, InputGroup, ListGroup, ListGroupItem, Row} from 'reactstrap'
 import '../css/userprofile.css'
-import Exercise from './Exercise.jsx'
-import Ingredient from './Ingredient.jsx'
+import Meal from './Meal.jsx'
 import axios from 'axios'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faEye } from '@fortawesome/free-solid-svg-icons'
+import Workout from './Workout.jsx'
 
 export default class UserProfile extends Component {
     constructor(props){
@@ -20,11 +20,13 @@ export default class UserProfile extends Component {
             showChangeEmail: false,
             showError: false,
             error: "",
-            showExercise: false,
-            exerciseInfo: {},
+            showWorkout: false,
+            workoutInfo: {},
             showMeal: false,
             mealInfo: {},
-            showPassword: false
+            showPassword: false,
+            showSuccess: false,
+            successMessage: ""
         }
         this.toggleChangeUsername = this.toggleChangeUsername.bind(this)
         this.toggleChangeEmail = this.toggleChangeEmail.bind(this)
@@ -32,67 +34,103 @@ export default class UserProfile extends Component {
         this.submitNewUsername = this.submitNewUsername.bind(this)
         this.submitNewEmail = this.submitNewEmail.bind(this)
         this.submitNewPassword = this.submitNewPassword.bind(this)
-        this.onExerciseClick = this.onExerciseClick.bind(this)
+        this.onWorkoutClick = this.onWorkoutClick.bind(this)
         this.onMealClick = this.onMealClick.bind(this)
         this.removeWorkout = this.removeWorkout.bind(this)
-        this.removeFood = this.removeFood.bind(this)
+        this.removeMeal = this.removeMeal.bind(this)
         this.showPassword = this.showPassword.bind(this)
+        this.showError = this.showError.bind(this)
+        this.toggleSuccess = this.toggleSuccess.bind(this)
+        this.toggle = this.toggle.bind(this)
+        this.toggleWorkoutModal = this.toggleWorkoutModal.bind(this)
+        this.toggleMealModal = this.toggleMealModal.bind(this)
     }
 
-    componentDidUpdate(prevProps){
-        if(this.props.userInfo !== prevProps.userInfo) console.log("stuff changed")
-    }
+    // componentDidUpdate(prevState){
+    //     if(prevState.successMessage !== this.state.successMessage){
+    //         setTimeout(() => {
+    //             this.setState({showSuccess:false})
+    //         }, 10000);
+    //     }
+    //     if(prevState.error !== this.state.error){
+    //         setTimeout(() => {
+    //             this.setState({showError:false})
+    //         }, 10000);
+    //     }
+    // }
 
     handleChange = (e) =>{
         let name = e.target.name 
         let value = e.target.value
-        this.setState({[name]: value, showError: false})
+        this.setState({[name]: value, showError: false, showSuccess: false})
     }
 
     toggleChangeUsername = () =>{
-        this.setState({showChangeUsername: !this.state.showChangeUsername})
+        this.setState({showChangeUsername: !this.state.showChangeUsername, showError: false, showSuccess: false})
     }
 
     toggleChangeEmail = () =>{
-        this.setState({showChangeEmail: !this.state.showChangeEmail})
+        this.setState({showChangeEmail: !this.state.showChangeEmail, showError: false, showSuccess: false})
     }
 
     toggleChangePassword = () =>{
-        this.setState({showChangePassword: !this.state.showChangePassword})
+        this.setState({showChangePassword: !this.state.showChangePassword, showError: false, showSuccess: false})
     }
 
     submitNewUsername = () =>{
-        this.setState({showChangeUsername: false})
         let {userInfo} = this.props
         axios.put('change_username', 
             {"username": userInfo.user.username, "updated_username": this.state.new_username})
             .then(response => {
-                this.props.updateUser(response.data.data.value)
+                if(response.data.message === "ok"){ 
+                    localStorage.setItem("username", this.state.new_username)
+                    this.toggleSuccess()
+                    this.setState({showChangeUsername: false, successMessage: response.data.success})
+                    this.props.updateUser(response.data.data.value)
+                }
+                else {
+                    this.showError()
+                    this.setState({error: response.data.message})
+                }
             })
     }
 
     submitNewEmail = () =>{
-        this.setState({showChangeEmail: false})
         let {userInfo} = this.props
         axios.put('change_email', 
             {"username": userInfo.user.username, "updated_email": this.state.new_email})
             .then(response => {
-                this.props.updateUser(response.data.data.value)
+                if(response.data.message === "ok"){ 
+                    this.toggleSuccess()
+                    this.setState({showChangeEmail: false, successMessage: response.data.success})
+                    this.props.updateUser(response.data.data.value)
+                }
+                else {
+                    this.showError()
+                    this.setState({error: response.data.message})
+                }
             })
     }
 
     submitNewPassword = () =>{
-        this.setState({showChangePassword: false})
         let {userInfo} = this.props
         axios.put('change_password', 
-            {"username": userInfo.user.username, "updated_password": this.state.updated_password})
+            {"username": userInfo.user.username, "updated_password": this.state.new_password})
             .then(response => {
-                this.props.updateUser(response.data.data.value)
+                if(response.data.message === "ok"){ 
+                    this.toggleSuccess()
+                    this.setState({showChangePassword: false, successMessage: response.data.success})
+                    this.props.updateUser(response.data.data.value)
+                }
+                else {
+                    this.showError()
+                    this.setState({error: response.data.message})
+                }
             })
     }
 
-    onExerciseClick = (each) =>{
-        this.setState({showExercise: !this.state.showExercise, exerciseInfo: each})
+    onWorkoutClick = (workout) =>{
+        this.setState({showWorkout: !this.state.showWorkout, workoutInfo: workout})
     }
 
     onMealClick = (each) =>{
@@ -107,26 +145,47 @@ export default class UserProfile extends Component {
             })
     }
 
-    removeFood = (each) =>{
+    removeMeal = (each) =>{
         let {userInfo} = this.props
         axios.put('remove_food', {"username": userInfo.user.username, "food": each.name})
             .then(response => {
                 this.props.updateUser(response.data.data.value)
             })
-
     }
 
     showPassword = () =>{
         this.setState({showPassword: !this.state.showPassword})
     }
 
+    showError = () =>{
+        this.setState({showError: true})
+    }
+
+    toggleSuccess = () => {
+        this.setState({showSuccess: true})
+    }
+
+    toggle = () =>{
+        this.props.toggle()
+        this.setState({showSuccess: false})
+    }
+
+    toggleWorkoutModal = () =>{
+        this.setState({showWorkout: !this.state.showWorkout})
+    }
+
+    toggleMealModal = () =>{
+        this.setState({showMeal: !this.state.showMeal})
+    }
+
     render() {
-        let {showUserProfile, userInfo, toggle}=this.props
-        let {showChangeUsername, showChangeEmail, showChangePassword, exerciseInfo, mealInfo, 
-            showExercise, showMeal, showPassword}=this.state
+        let {showUserProfile, userInfo}=this.props
+        let {showChangeUsername, showChangeEmail, showChangePassword, workoutInfo, mealInfo, 
+            showWorkout, showMeal, showPassword, showError, error, showSuccess, successMessage}=this.state
+        console.log(this.state)
         return (
             <Modal backdrop={true} isOpen={showUserProfile}>
-                <ModalHeader toggle={toggle} charCode="x">
+                <ModalHeader toggle={this.toggle} charCode="x">
                     {userInfo.user.username}'s Profile
                 </ModalHeader >
                 <ModalBody id="user-profile-body" >
@@ -175,29 +234,43 @@ export default class UserProfile extends Component {
                         </FormGroup>
                     </Form>
                     
+                    <Collapse isOpen={showError}>
+                        <p style={{color:"red", textAlign:"center"}}>{error}</p>
+                    </Collapse>
+
+                    <Collapse isOpen={showSuccess}>
+                        <p style={{color:"green", textAlign:"center"}}>{successMessage}</p>
+                    </Collapse>
+            
+                    <br/>
                     <div id="workouts-meals-container">
                         <hr/>
-                        <Label>Personal Workouts</Label>
+                        <h3>Personal Workouts</h3>
                         <ListGroup id="workouts-col">
-                            {userInfo.user.workouts.map((each, id) => (
+                            {userInfo.user.workouts.length === 0 ? 
+                            <p style={{color:"darkgrey", textAlign:"center"}}>No workouts created..</p> :
+                            userInfo.user.workouts.map((each, id) => (
                                 <Row id="row_layout" key={id} >
                                     <ListGroupItem 
                                         xs="10"
                                         style={{backgroundColor:"lightgrey"}} 
                                         id="workouts" 
                                         tag="button" 
-                                        onClick={()=>this.onExerciseClick(each)}> 
+                                        onClick={()=>this.onWorkoutClick(each)}> 
                                             <span style={{}}>{each.name}</span>
                                     </ListGroupItem>
                                     <ListGroupItem id="workoutsx" xs="2" tag="button" onClick={()=>this.removeWorkout(each)}>x</ListGroupItem>
                                 </Row>
                             ))}
                         </ListGroup>
-                        {showExercise && <Exercise fromProfile={true} info={exerciseInfo} isOpen={showExercise}/>}
-                        <br/>
-                        <Label>Personal Meals</Label>
+                        {showWorkout && <Workout toggleModal={this.toggleWorkoutModal} userInfo={userInfo} fromProfile={true} workoutInfo={workoutInfo} isOpen={showWorkout}/>}
+                        
+                        <hr/>
+                        <h3>Personal Meals</h3>
                         <ListGroup id="meals-col">
-                            {userInfo.user.meals.map((each, id) => (
+                            {userInfo.user.meals.length === 0 ? 
+                            <p style={{color:"darkgrey", textAlign:"center"}}>No meals selected..</p> :
+                            userInfo.user.meals.map((each, id) => (
                                 <Row id="row_layout" key={id} >
                                     <ListGroupItem 
                                         xs="10"
@@ -207,11 +280,11 @@ export default class UserProfile extends Component {
                                         onClick={()=>this.onMealClick(each)}> 
                                             <span>{each.name}</span>
                                     </ListGroupItem>
-                                    <ListGroupItem id="mealsx" xs="2" tag="button" onClick={()=>this.removeFood(each)} >x</ListGroupItem>
+                                    <ListGroupItem id="mealsx" xs="2" tag="button" onClick={()=>this.removeMeal(each)} >x</ListGroupItem>
                                 </Row>
                                 ))}
                         </ListGroup>
-                        {showMeal && <Ingredient fromProfile={true} info={mealInfo} isOpen={showMeal}/>}
+                        {showMeal && <Meal toggleModal={this.toggleMealModal} fromProfile={true} userInfo={userInfo} info={mealInfo} isOpen={showMeal}/>}
                     </div>
                 </ModalBody>
             </Modal>

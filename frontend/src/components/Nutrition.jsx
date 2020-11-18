@@ -41,7 +41,7 @@ export default class Nutrition extends Component {
 
     render() {
         let {searchResults, searchWord, searchHeader, showIngredient, ingredientInfo} = this.state
-        let {toggleNutrition, userInfo, updateUser} = this.props
+        let {toggleNutrition, userInfo, updateUser, isLoggedIn} = this.props
         return (
             <Container id="nutrition-container">
                 <InputGroup>
@@ -63,7 +63,14 @@ export default class Nutrition extends Component {
                         </ListGroupItem>
                     ))}
                 </ListGroup>
-                {showIngredient && <Ingredient updateUser={updateUser} fromProfile={false} userInfo={userInfo} info={ingredientInfo} isOpen={showIngredient}/>}
+                {showIngredient && 
+                    <Ingredient 
+                        updateUser={updateUser} 
+                        fromProfile={false} 
+                        userInfo={userInfo} 
+                        info={ingredientInfo} 
+                        isOpen={showIngredient}
+                        isLoggedIn={isLoggedIn}/>}
             </Container>
         )
     }

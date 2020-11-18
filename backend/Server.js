@@ -10,16 +10,22 @@ app.use(bodyParser.json())
 
 //MongoDB CRUD Functions -----------------------------------------------------
 const {Login, Register, Authenticate, getUser, Logout, 
-        addWorkout, addFood, removeWorkout, removeFood,
-        changeUsername, changePassword, changeEmail} = require('./dbFunctions')
+        addFood, addExercise, createWorkout, removeWorkout, removeExercise, removeFood,
+        changeUsername, changePassword, changeEmail,  createMeal} = require('./dbFunctions')
 app.post('/getuser', getUser)
 app.post('/login', Login)
 app.get('/logout', Logout)
 app.post('/register', Register)
-app.put('/add_workout', addWorkout)
-app.put('/add_food', addFood)
+
+app.put('/add_exercise', addExercise)
+app.put('/create_workout', createWorkout)
+app.put('/remove_exercise', removeExercise)
 app.put('/remove_workout', removeWorkout)
+
+app.put('/create_meal', createMeal)
+app.put('/add_food', addFood)
 app.put('/remove_food', removeFood)
+
 app.put('/change_username', changeUsername)
 app.put('/change_email', changeEmail)
 app.put('/change_password', changePassword)
