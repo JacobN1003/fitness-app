@@ -15,6 +15,7 @@ export default class Nutrition extends Component {
         }
         this.showInfo = this.showInfo.bind(this)
         this.onSearch = this.onSearch.bind(this)
+        this.handleKeyPress = this.handleKeyPress.bind(this)
     }
 
     handleInput = (input) => {
@@ -39,6 +40,12 @@ export default class Nutrition extends Component {
         this.setState({ingredientInfo: ingredient, showIngredient: !this.state.showIngredient})
     }
 
+    handleKeyPress = (e) =>{
+        if(e.charCode === 13){
+            this.onSearch(this.state.searchWord)
+        } 
+    }
+
     render() {
         let {searchResults, searchWord, searchHeader, showIngredient, ingredientInfo} = this.state
         let {toggleNutrition, userInfo, updateUser, isLoggedIn} = this.props
@@ -46,8 +53,8 @@ export default class Nutrition extends Component {
             <Container id="nutrition-container">
                 <InputGroup>
                     <Button color="info" size="sm" style={{borderRadius:'10px', marginRight: '10px'}} onClick={toggleNutrition}>&lt;-</Button>
-                    <Input placeholder="Search food.." onChange={this.handleInput} />
-                    <Button onClick={()=>this.onSearch(searchWord)}>Search</Button>
+                    <Input placeholder="Search food.." onChange={this.handleInput} onKeyPress={this.handleKeyPress}/>
+                    <Button id="search-btn" onClick={()=>this.onSearch(searchWord)} >Search</Button>
                 </InputGroup>
                 <ListGroup id="exercise-col">
                     {searchResults.length === 0 ?

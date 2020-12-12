@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import {Modal, ModalHeader, ModalBody, Button, Form, FormGroup, Label, Input, 
-    Collapse, InputGroup, ListGroup, ListGroupItem, Row} from 'reactstrap'
+    Collapse, InputGroup, ListGroup, ListGroupItem, Row, Col} from 'reactstrap'
 import '../css/userprofile.css'
 import Meal from './Meal.jsx'
 import axios from 'axios'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faEye } from '@fortawesome/free-solid-svg-icons'
+import {faEye, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Workout from './Workout.jsx'
 
 export default class UserProfile extends Component {
@@ -45,19 +45,6 @@ export default class UserProfile extends Component {
         this.toggleWorkoutModal = this.toggleWorkoutModal.bind(this)
         this.toggleMealModal = this.toggleMealModal.bind(this)
     }
-
-    // componentDidUpdate(prevState){
-    //     if(prevState.successMessage !== this.state.successMessage){
-    //         setTimeout(() => {
-    //             this.setState({showSuccess:false})
-    //         }, 10000);
-    //     }
-    //     if(prevState.error !== this.state.error){
-    //         setTimeout(() => {
-    //             this.setState({showError:false})
-    //         }, 10000);
-    //     }
-    // }
 
     handleChange = (e) =>{
         let name = e.target.name 
@@ -182,7 +169,7 @@ export default class UserProfile extends Component {
         let {showUserProfile, userInfo}=this.props
         let {showChangeUsername, showChangeEmail, showChangePassword, workoutInfo, mealInfo, 
             showWorkout, showMeal, showPassword, showError, error, showSuccess, successMessage}=this.state
-        console.log(this.state)
+        console.log("stuff did things..")
         return (
             <Modal backdrop={true} isOpen={showUserProfile}>
                 <ModalHeader toggle={this.toggle} charCode="x">
@@ -259,7 +246,9 @@ export default class UserProfile extends Component {
                                         onClick={()=>this.onWorkoutClick(each)}> 
                                             <span style={{}}>{each.name}</span>
                                     </ListGroupItem>
-                                    <ListGroupItem id="workoutsx" xs="2" tag="button" onClick={()=>this.removeWorkout(each)}>x</ListGroupItem>
+                                    <ListGroupItem id="workoutsx" xs="2" tag="button" onClick={()=>this.removeWorkout(each)}>
+                                        <FontAwesomeIcon icon={faTrashAlt}/>
+                                    </ListGroupItem>
                                 </Row>
                             ))}
                         </ListGroup>
@@ -280,7 +269,9 @@ export default class UserProfile extends Component {
                                         onClick={()=>this.onMealClick(each)}> 
                                             <span>{each.name}</span>
                                     </ListGroupItem>
-                                    <ListGroupItem id="mealsx" xs="2" tag="button" onClick={()=>this.removeMeal(each)} >x</ListGroupItem>
+                                    <ListGroupItem id="mealsx" xs="2" tag="button" onClick={()=>this.removeMeal(each)} >
+                                        <FontAwesomeIcon icon={faTrashAlt}/>
+                                    </ListGroupItem>
                                 </Row>
                                 ))}
                         </ListGroup>

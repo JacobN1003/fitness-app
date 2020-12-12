@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Modal, ModalBody, ModalHeader, ModalFooter, Button, ListGroup, ListGroupItem, Input, Row} from 'reactstrap'
+import {Modal, ModalBody, ModalHeader, ModalFooter, Button, ListGroup, ListGroupItem, Input, Row, Container} from 'reactstrap'
 import axios from 'axios'
 
 export default class Ingredient extends Component {
@@ -45,7 +45,7 @@ export default class Ingredient extends Component {
             .then(response => {
                 this.props.updateUser(response.data.data.value)
             })
-        this.setState({added: true})
+        this.setState({added: true, openNewMeal: false})
     }
 
     addFood = (meal) =>{
@@ -54,7 +54,7 @@ export default class Ingredient extends Component {
             .then(response => {
                 this.props.updateUser(response.data.data.value)
             })
-        this.setState({added: true})
+        this.setState({added: true, openMeals: false})
     }
 
     render() {
@@ -86,25 +86,27 @@ export default class Ingredient extends Component {
 
                 <Modal isOpen={openMeals}>
                     <ModalHeader>{userInfo.user.username + "'s Personal Meals"}</ModalHeader>
-                    <ModalBody>
+                    <ModalBody style={{height:"400px", backgroundColor:"black"}}>
                         <h3 style={{textAlign:"center"}}>Add to..</h3>
-                        <ListGroup>
-                            {userInfo.user.meals.length === 0 ? 
-                            <div>
-                                <p style={{color:"darkgrey", textAlign:"center"}}>You Don't Have Any Personal Meals..</p>
-                            </div>
-                             :
-                            userInfo.user.meals.map((meal, id) => (
-                                <Row key={id} >
-                                    <ListGroupItem 
-                                        style={{backgroundColor:"lightgrey"}} 
-                                        tag="button" 
-                                        onClick={()=>this.addFood(meal.name)}> 
-                                            {meal.name}
-                                    </ListGroupItem>
-                                </Row>
-                            ))}
-                        </ListGroup>
+                        <Container>
+                            <ListGroup id="exercise-col">
+                                {userInfo.user.meals.length === 0 ? 
+                                <div>
+                                    <p style={{color:"darkgrey", textAlign:"center"}}>You Don't Have Any Personal Meals..</p>
+                                </div>
+                                :
+                                userInfo.user.meals.map((meal, id) => (
+                                    <Row key={id} >
+                                        <ListGroupItem 
+                                            style={{backgroundColor:"rgb(45, 45, 45)", color:"white", width:"100%"}}
+                                            tag="button" 
+                                            onClick={()=>this.addFood(meal.name)}> 
+                                                {meal.name}
+                                        </ListGroupItem>
+                                    </Row>
+                                ))}
+                            </ListGroup>
+                        </Container>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.toggleNewMealModal}>Create A New Meal</Button>
@@ -114,11 +116,13 @@ export default class Ingredient extends Component {
 
                 <Modal isOpen={openNewMeal}>
                     <ModalHeader>Create A Personal Meal</ModalHeader>
-                    <ModalBody>
+                    <ModalBody style={{height:'100px'}}>
                         <Input name="newMealName" onChange={this.handleChange} placeholder="name your meal.."/>
+                    </ModalBody>
+                    <ModalFooter>
                         <Button color="primary" onClick={this.addMeal}>Create</Button>
                         <Button onClick={this.toggleNewMealModal} >Cancel</Button>
-                    </ModalBody>
+                    </ModalFooter>
                 </Modal>
             </div>
         )

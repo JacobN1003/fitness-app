@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Modal, ModalBody, ModalHeader, ModalFooter, Button, ListGroup, ListGroupItem,
-Row, Input } from 'reactstrap'
+Row, Input, Container } from 'reactstrap'
 import '../css/exercise.css'
 import axios from 'axios'
 
@@ -66,13 +66,13 @@ export default class Exercise extends Component {
             .then(response => {
                 this.props.updateUser(response.data.data.value)
             })
-            this.setState({added: true})
+            this.setState({added: true, openNewWorkout: false})
     }
 
     render() {
         const {info, fromProfile, userInfo, isLoggedIn} = this.props
         let {added, openWorkouts, openNewWorkout} = this.state
-        console.log(userInfo)
+        //console.log(userInfo)
         return (
             <div id="exercise">
                 <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} >
@@ -107,25 +107,27 @@ export default class Exercise extends Component {
                 
                 <Modal isOpen={openWorkouts}>
                     <ModalHeader>{userInfo.user.username + "'s Personal Workouts"}</ModalHeader>
-                    <ModalBody>
+                    <ModalBody style={{height:"400px", backgroundColor:"black"}}>
                         <h3 style={{textAlign:"center"}}>Add to..</h3>
-                        <ListGroup>
-                            {userInfo.user.workouts.length === 0 ? 
-                            <div>
-                                <p style={{color:"darkgrey", textAlign:"center"}}>You Don't Have Any Personal Workouts..</p>
-                            </div>
-                             :
-                            userInfo.user.workouts.map((workout, id) => (
-                                <Row key={id} >
-                                    <ListGroupItem 
-                                        style={{backgroundColor:"lightgrey"}} 
-                                        tag="button" 
-                                        onClick={()=>this.addExercise(workout.name)}> 
-                                            {workout.name}
-                                    </ListGroupItem>
-                                </Row>
-                            ))}
-                        </ListGroup>
+                        <Container>
+                            <ListGroup>
+                                {userInfo.user.workouts.length === 0 ? 
+                                <div>
+                                    <p style={{color:"darkgrey", textAlign:"center"}}>You Don't Have Any Personal Workouts..</p>
+                                </div>
+                                :
+                                userInfo.user.workouts.map((workout, id) => (
+                                    <Row key={id} >
+                                        <ListGroupItem 
+                                            style={{backgroundColor:"rgb(45, 45, 45)", color:"white", width:"100%"}}
+                                            tag="button" 
+                                            onClick={()=>this.addExercise(workout.name)}> 
+                                                {workout.name}
+                                        </ListGroupItem>
+                                    </Row>
+                                ))}
+                            </ListGroup>
+                        </Container>
                     </ModalBody>
                     <ModalFooter>
                         <Button color="primary" onClick={this.toggleNewWorkoutModal}>Create A New Workout</Button>
@@ -135,11 +137,14 @@ export default class Exercise extends Component {
 
                 <Modal isOpen={openNewWorkout}>
                     <ModalHeader>Create A Personal Workout</ModalHeader>
-                    <ModalBody>
+                    <ModalBody style={{height:"100px"}}>
                         <Input name="newWorkoutName" onChange={this.handleChange} placeholder="name your workout.."/>
+                        <br/>
+                    </ModalBody>
+                    <ModalFooter>
                         <Button color="primary" onClick={this.createWorkout}>Create</Button>
                         <Button onClick={this.toggleNewWorkoutModal} >Cancel</Button>
-                    </ModalBody>
+                    </ModalFooter>
                 </Modal>
             </div>
         )

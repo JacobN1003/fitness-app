@@ -27,15 +27,18 @@
     justify-content: center;
 }
 
-#each-card{
+#each-equip{
+    height: 100%;
+    filter: brightness(70%);
     transition-duration: 1s;
 }
 
-#each-card:hover{
+#each-equip:hover{
     transition-duration: 1s;
+    cursor: pointer;
     transform: scale(1.05,1.1);
 }
 
-#each-card:active{
+#each-equip:active{
     transition-duration: 1s;
 }   

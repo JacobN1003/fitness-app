@@ -69,7 +69,7 @@ export default class NavigationBar extends Component {
                 <Navbar color="dark" dark>
                     <NavbarBrand className="mr-auto" id="tooltip">The Training Room</NavbarBrand>
                     <Tooltip placement="bottom" isOpen={tooltipOpen} target="tooltip" toggle={this.toggleToolTip}>
-                        Data used with WGER Workout Manager
+                        Data from WGER Workout Manager
                     </Tooltip>
                     {!isLoggedIn && <Button color="primary" className="mr-2" onClick={this.openLoginModal}> Login </Button>}
                     {isLoggedIn && 
