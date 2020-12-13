@@ -5,9 +5,10 @@
   "main": "Server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "heroku-postbuild": "npm run install-frontend && npm run build",
+    "build": "cd frontend && npm run build",
     "install-frontend": "cd frontend && npm install",
+    "heroku-postbuild": "npm run install-frontend && npm run build",
+    "start": "nodemon server.js",
     "client": "cd frontend && npm run start",
     "dev": "concurrently  \"npm run start\" \"npm run client\""
   },

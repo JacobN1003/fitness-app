@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
-const { PORT } = process.env 
+const { PORT } = process.env || 5001
 
 app.use(cookieParser())
 app.use(bodyParser.json())
