@@ -27,11 +27,6 @@ export default class Workout extends Component {
                 <Modal toggle={this.props.toggleModal} isOpen={isOpen}>
                     <ModalHeader toggle={toggleModal} charCode="x">{workoutInfo.name}</ModalHeader>
                     <ModalBody style={{width:'400px'}}>
-                        <h4>Routine</h4>
-                        <p>example</p>
-                        <p>example</p>
-                        <p>example</p>
-                        <hr/>
                         <ListGroup>
                             {workoutInfo.exercises.map((exercise, id)=>(
                                 <ListGroupItem
