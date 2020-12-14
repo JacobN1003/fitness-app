@@ -247,7 +247,7 @@ export default class UserProfile extends Component {
                                             <span style={{}}>{each.name}</span>
                                     </ListGroupItem>
                                     <ListGroupItem id="workoutsx" xs="2" tag="button" onClick={()=>this.removeWorkout(each)}>
-                                        <FontAwesomeIcon icon={faTrashAlt}/>
+                                        <p style={{fontWeight:"800", paddingTop:"15px", color:"white"}}>X</p>
                                     </ListGroupItem>
                                 </Row>
                             ))}
