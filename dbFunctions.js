@@ -206,10 +206,10 @@ exports.getUser = async function(req, res){
 
 exports.Login = async function(req, res){
     let {username, password} = req.body
-    try{
+    
         await client.connect()
         let user = await client.db('fitness-app').collection('users').findOne({"username": username})
-        //client.close()
+        client.close()
         if(!user){
             res.send({'message': 'Invalid Username'})
             return
@@ -221,13 +221,10 @@ exports.Login = async function(req, res){
             // res.cookie("jwt", accessToken, {httpOnly: true})
             localStorage.setItem('jwt', accessToken)
             res.send({'message':'ok', 'data': {"user":user, "token": accessToken}})
-            //client.close()
+            client.close()
         }
         else res.send({'message': 'Invalid Credentials'})
-    }
-    catch(err){ 
-        res.send(err)
-    }
+    
 }
 
 exports.Logout = async function(req, res){
