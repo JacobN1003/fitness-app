@@ -200,9 +200,9 @@ export default class UserProfile extends Component {
                                 <InputGroup>
                                     <Input type={showPassword ? "password" : "text"} name="new_password" onChange={this.handleChange}/>
                                     <Button color="primary" onClick={this.submitNewPassword}>Save</Button>
-                                    <Button color="warning" onClick={this.showPassword}>
+                                    {/* <Button color="warning" onClick={this.showPassword}>
                                         <FontAwesomeIcon icon={faEye}/>
-                                    </Button>
+                                    </Button> */}
                                 </InputGroup>
                             </Collapse>
                         </FormGroup>
