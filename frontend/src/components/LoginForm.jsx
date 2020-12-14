@@ -62,7 +62,7 @@ export default class LoginForm extends Component {
                             </Collapse>
                             <div id="register-forgotpw-btncontainer">
                                 <Button id="register-btn" color="secondary" size="sm" onClick={openNewUserModal} >New User?</Button>
-                                <Button id="forgotpw-btn" color="secondary" size="sm" onClick={openLoginModal}>Forgot Password?</Button>
+                                {/* <Button id="forgotpw-btn" color="secondary" size="sm" onClick={openLoginModal}>Forgot Password?</Button> */}
                             </div>
                         </Form>
                     </ModalBody>
