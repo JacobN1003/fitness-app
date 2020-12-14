@@ -60,6 +60,7 @@ export default class Ingredient extends Component {
     render() {
         let {info, fromProfile, userInfo, isLoggedIn} = this.props
         let {added, openMeals, openNewMeal} = this.state
+        //console.log(userInfo)
         return (
             <div>
                 <Modal toggle={this.toggleModal} isOpen={this.state.isOpen} style={{width: '400px'}}>

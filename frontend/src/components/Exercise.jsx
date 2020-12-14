@@ -12,7 +12,9 @@ export default class Exercise extends Component {
             added: false,
             openWorkouts: false,
             openNewWorkout: false,
-            newWorkoutName: ""
+            newWorkoutName: "",
+            showDuplicateError: false,
+            selected_workout: ""
         }
         this.toggleModal = this.toggleModal.bind(this)
         this.formatDescription = this.formatDescription.bind(this)
@@ -21,6 +23,29 @@ export default class Exercise extends Component {
         this.toggleWorkouts = this.toggleWorkouts.bind(this)
         this.toggleNewWorkoutModal = this.toggleNewWorkoutModal.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.handleDuplicate = this.handleDuplicate.bind(this)
+        this.checkDuplicate = this.checkDuplicate.bind(this)
+    }
+
+    handleDuplicate = () => {
+        this.setState({showDuplicateError: false})
+    }
+
+    checkDuplicate = (workout) =>{
+        let {info, userInfo} = this.props
+        let flag = false
+        userInfo.user.workouts.forEach(each => {
+            if(workout === each.name){
+                console.log(each.name)
+                each.exercises.forEach(exercise => {
+                    if(info.name === exercise.name){
+                        console.log(exercise.name)
+                        flag = true
+                    }
+                })
+            }
+        })    
+        return flag
     }
 
     handleChange = (e) =>{
@@ -52,11 +77,18 @@ export default class Exercise extends Component {
 
     addExercise = (workout) =>{
         let {info, userInfo} = this.props
-        axios.put('add_exercise', {"username": userInfo.user.username, "workout": workout, "exercise": info})
-            .then(response => {
-                this.props.updateUser(response.data.data.value)
-            })
-            this.setState({added: true, openWorkouts: false})
+        this.setState({selected_workout: workout})
+        if(!this.checkDuplicate(workout)){
+            axios.put('add_exercise', {"username": userInfo.user.username, "workout": workout, "exercise": info})
+                .then(response => {
+                    this.props.updateUser(response.data.data.value)
+                })
+                this.setState({added: true, openWorkouts: false})
+        }
+        else{
+            this.setState({showDuplicateError: true, openWorkouts: false})
+        }
+                    
     }
 
     createWorkout = () =>{
@@ -66,12 +98,12 @@ export default class Exercise extends Component {
             .then(response => {
                 this.props.updateUser(response.data.data.value)
             })
-            this.setState({added: true, openNewWorkout: false})
+            this.setState({openNewWorkout: false})
     }
 
     render() {
         const {info, fromProfile, userInfo, isLoggedIn} = this.props
-        let {added, openWorkouts, openNewWorkout} = this.state
+        let {added, openWorkouts, openNewWorkout, showDuplicateError, selected_workout} = this.state
         //console.log(userInfo)
         return (
             <div id="exercise">
@@ -144,6 +176,18 @@ export default class Exercise extends Component {
                     <ModalFooter>
                         <Button color="primary" onClick={this.createWorkout}>Create</Button>
                         <Button onClick={this.toggleNewWorkoutModal} >Cancel</Button>
+                    </ModalFooter>
+                </Modal>
+
+                <Modal isOpen={showDuplicateError} >
+                    <ModalBody style={{height:"150px", backgroundColor: "black"}}>
+                        <h3 style={{color:"darkgrey", textAlign:"center"}}>Oops!</h3>
+                        <h5 style={{color:"darkgrey", textAlign:"center"}}> 
+                            <b>{selected_workout}</b> already contains this exercise. 
+                        </h5>
+                    </ModalBody>
+                    <ModalFooter style={{ backgroundColor: "black"}}>
+                        <Button color="primary" onClick={this.handleDuplicate}>Okay</Button>
                     </ModalFooter>
                 </Modal>
             </div>
