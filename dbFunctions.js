@@ -1,8 +1,8 @@
 require('dotenv').config()
-const { MONGO_USERNAME, MONGO_PW, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_LIFE } = process.env
+const { MONGO_USERNAME, MONGO_PW, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_LIFE, MONGO_URI } = process.env
 const { MongoClient } = require('mongodb')
 const uri = `mongodb+srv://${MONGO_USERNAME}:${MONGO_PW}@cluster0.zxtob.mongodb.net/cluster0?retryWrites=true&w=majority`
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+const client = new MongoClient(process.env.MONGO_URI || uri, { useNewUrlParser: true, useUnifiedTopology: true })
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt-nodejs')
 if (typeof localStorage === "undefined" || localStorage === null) {

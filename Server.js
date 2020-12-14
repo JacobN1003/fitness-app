@@ -41,4 +41,4 @@ if(process.env.NODE_ENV === 'production'){
 }
 
 //Start the server
-app.listen(PORT, () => console.log(`listening on port ${PORT}..`))
+app.listen(process.env.PORT || 5001, () => console.log(`listening on port ${PORT}..`))
