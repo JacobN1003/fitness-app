@@ -270,7 +270,7 @@ export default class UserProfile extends Component {
                                             <span>{each.name}</span>
                                     </ListGroupItem>
                                     <ListGroupItem id="mealsx" xs="2" tag="button" onClick={()=>this.removeMeal(each)} >
-                                        <FontAwesomeIcon icon={faTrashAlt}/>
+                                        <p style={{fontWeight:"800", paddingTop:"15px", color:"white"}}>X</p>
                                     </ListGroupItem>
                                 </Row>
                                 ))}
